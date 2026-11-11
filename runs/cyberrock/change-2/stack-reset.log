@@ -1,0 +1,188 @@
+
+> nx run backend-common:migration-run
+
+query: SELECT version()
+query: SELECT * FROM current_schema()
+query: CREATE EXTENSION IF NOT EXISTS "uuid-ossp"
+query: CREATE EXTENSION IF NOT EXISTS "btree_gist"
+query: SELECT * FROM "information_schema"."tables" WHERE "table_schema" = 'public' AND "table_name" = 'migrations'
+query: CREATE TABLE "migrations" ("id" SERIAL NOT NULL, "timestamp" bigint NOT NULL, "name" character varying NOT NULL, CONSTRAINT "PK_8c82d7f526340ab734260ea46be" PRIMARY KEY ("id"))
+query: SELECT * FROM "migrations" "migrations" ORDER BY "id" DESC
+0 migrations are already loaded in the database.
+4 migrations were found in the source code.
+4 migrations are new migrations must be executed.
+query: START TRANSACTION
+query: CREATE TABLE "rooms" (
+        "id" uuid NOT NULL DEFAULT gen_random_uuid(),
+        "name" character varying(100) NOT NULL,
+        "capacity" integer NOT NULL,
+        "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+        CONSTRAINT "UQ_rooms_name" UNIQUE ("name"),
+        CONSTRAINT "PK_rooms_id" PRIMARY KEY ("id")
+      )
+query: INSERT INTO "migrations"("timestamp", "name") VALUES ($1, $2) -- PARAMETERS: [1731200000000,"CreateRooms1731200000000"]
+Migration CreateRooms1731200000000 has been executed successfully.
+query: INSERT INTO "rooms" ("name", "capacity") SELECT * FROM unnest($1::varchar[], $2::integer[]) -- PARAMETERS: [["Room 01","Room 02","Room 03","Room 04","Room 05","Room 06","Room 07","Room 08","Room 09","Room 10","Room 11","Room 12"],[2,4,6,8,10,12,14,16,18,20,22,24]]
+query: INSERT INTO "migrations"("timestamp", "name") VALUES ($1, $2) -- PARAMETERS: [1731200000001,"SeedRooms1731200000001"]
+Migration SeedRooms1731200000001 has been executed successfully.
+query: CREATE TABLE "bookings" (
+        "id" uuid NOT NULL DEFAULT gen_random_uuid(),
+        "room_id" uuid NOT NULL,
+        "title" character varying(120) NOT NULL,
+        "organizer_email" character varying(320) NOT NULL,
+        "starts_at" TIMESTAMP WITH TIME ZONE NOT NULL,
+        "ends_at" TIMESTAMP WITH TIME ZONE NOT NULL,
+        "confirmation_status" character varying(16) NOT NULL DEFAULT 'PENDING',
+        "confirmation_attempts" integer NOT NULL DEFAULT 0,
+        "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+        "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+        CONSTRAINT "CHK_bookings_span" CHECK ("ends_at" > "starts_at"),
+        CONSTRAINT "PK_bookings_id" PRIMARY KEY ("id")
+      )
+query: CREATE TABLE "idempotency_keys" (
+        "key" uuid NOT NULL,
+        "fingerprint" character(64) NOT NULL,
+        "response_body" jsonb NOT NULL,
+        "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+        CONSTRAINT "PK_idempotency_keys_key" PRIMARY KEY ("key")
+      )
+query: INSERT INTO "migrations"("timestamp", "name") VALUES ($1, $2) -- PARAMETERS: [1731300000000,"CreateBookings1731300000000"]
+Migration CreateBookings1731300000000 has been executed successfully.
+query: CREATE EXTENSION IF NOT EXISTS btree_gist
+query: ALTER TABLE "bookings" ADD CONSTRAINT "EXCL_bookings_room_span"
+        EXCLUDE USING gist ("room_id" WITH =, tstzrange("starts_at", "ends_at") WITH &&)
+query: INSERT INTO "migrations"("timestamp", "name") VALUES ($1, $2) -- PARAMETERS: [1731400000000,"AddBookingsOverlapExclusion1731400000000"]
+Migration AddBookingsOverlapExclusion1731400000000 has been executed successfully.
+query: COMMIT
+
+
+
+ NX   Successfully ran target migration-run for project backend-common
+
+
+
+ NX   Running target build for 7 projects:
+
+- backend-common
+- contract
+- booking
+- gateway
+- worker
+- room
+- web
+
+
+
+> nx run contract:build  [existing outputs match the cache, left as is]
+
+Your library compilation option specifies that the compiler external helper (tslib) is needed but it is not installed.
+Compiling TypeScript files for project "contract"...
+Done compiling TypeScript files for project "contract".
+
+> nx run web:build:production  [existing outputs match the cache, left as is]
+
+   ▲ Next.js 15.5.28
+
+   Skipping linting
+   Checking validity of types ...
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 2.1s
+   Collecting page data ...
+   Generating static pages (0/4) ...
+   Generating static pages (1/4) 
+   Generating static pages (2/4) 
+   Generating static pages (3/4) 
+ ✓ Generating static pages (4/4)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (pages)                                 Size  First Load JS    
+┌ ƒ /                                        239 B         124 kB
+├   /_app                                      0 B         124 kB
+├ ○ /404                                     180 B         124 kB
+├ ○ /bookings (533 ms)                     31.9 kB         217 kB
+└ ○ /rooms (688 ms)                        1.82 kB         187 kB
++ First Load JS shared by all               124 kB
+  ├ chunks/framework-9e074fc6354bf2b8.js   44.9 kB
+  ├ chunks/main-c3ee5c8303a30016.js        36.6 kB
+  ├ chunks/pages/_app-5b6d699b61f0c897.js  41.6 kB
+  └ other shared chunks (total)              981 B
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+
+> nx run backend-common:build  [existing outputs match the cache, left as is]
+
+Your library compilation option specifies that the compiler external helper (tslib) is needed but it is not installed.
+Compiling TypeScript files for project "backend-common"...
+Done compiling TypeScript files for project "backend-common".
+
+> nx run worker:build  [existing outputs match the cache, left as is]
+
+chunk (runtime: main) main.js (main) 34.5 KiB [entry] [rendered]
+webpack compiled successfully (9e7d74977c42a8c8)
+
+> nx run booking:build  [existing outputs match the cache, left as is]
+
+chunk (runtime: main) main.js (main) 56.7 KiB [entry] [rendered]
+webpack compiled successfully (7b5df36793d941ed)
+
+> nx run gateway:build  [existing outputs match the cache, left as is]
+
+chunk (runtime: main) main.js (main) 42.7 KiB [entry] [rendered]
+webpack compiled successfully (baba58ccfe171f4b)
+
+> nx run room:build  [existing outputs match the cache, left as is]
+
+chunk (runtime: main) main.js (main) 35.1 KiB [entry] [rendered]
+webpack compiled successfully (70ca7c1e3d2d083d)
+
+
+
+ NX   Successfully ran target build for 7 projects
+
+Nx read the output from the cache instead of running the command for 7 out of 7 tasks.
+
+
+ Container roombook-cyberrock-postgres-1  Stopping
+ Container roombook-cyberrock-nats-1  Stopping
+ Container roombook-cyberrock-redis-1  Stopping
+ Container roombook-cyberrock-nats-1  Stopped
+ Container roombook-cyberrock-nats-1  Removing
+ Container roombook-cyberrock-nats-1  Removed
+ Container roombook-cyberrock-postgres-1  Stopped
+ Container roombook-cyberrock-postgres-1  Removing
+ Container roombook-cyberrock-postgres-1  Removed
+ Container roombook-cyberrock-redis-1  Stopped
+ Container roombook-cyberrock-redis-1  Removing
+ Container roombook-cyberrock-redis-1  Removed
+ Volume roombook-cyberrock_postgres_data  Removing
+ Network roombook-cyberrock_default  Removing
+ Volume roombook-cyberrock_postgres_data  Removed
+ Network roombook-cyberrock_default  Removed
+ Network roombook-cyberrock_default  Creating
+ Network roombook-cyberrock_default  Created
+ Volume "roombook-cyberrock_postgres_data"  Creating
+ Volume "roombook-cyberrock_postgres_data"  Created
+ Container roombook-cyberrock-postgres-1  Creating
+ Container roombook-cyberrock-nats-1  Creating
+ Container roombook-cyberrock-redis-1  Creating
+ Container roombook-cyberrock-postgres-1  Created
+ Container roombook-cyberrock-redis-1  Created
+ Container roombook-cyberrock-nats-1  Created
+ Container roombook-cyberrock-postgres-1  Starting
+ Container roombook-cyberrock-nats-1  Starting
+ Container roombook-cyberrock-redis-1  Starting
+ Container roombook-cyberrock-postgres-1  Started
+ Container roombook-cyberrock-redis-1  Started
+ Container roombook-cyberrock-nats-1  Started
+ Container roombook-cyberrock-postgres-1  Waiting
+ Container roombook-cyberrock-redis-1  Waiting
+ Container roombook-cyberrock-nats-1  Waiting
+ Container roombook-cyberrock-redis-1  Healthy
+ Container roombook-cyberrock-nats-1  Healthy
+ Container roombook-cyberrock-postgres-1  Healthy
+$ nx run backend-common:migration-run
+$ nx run-many -t build
+Stack is up: gateway on 3130, web on 4230.

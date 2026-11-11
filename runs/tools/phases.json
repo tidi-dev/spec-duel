@@ -19,5 +19,12 @@
     "tasks": "plan",
     "analyze": "check",
     "implement": "implement"
+  },
+  "cyberrock": {
+    "smoke": "setup",
+    "propose": "specify",
+    "revise": "specify",
+    "validate": "check",
+    "apply": "implement"
   }
 }

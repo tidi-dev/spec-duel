@@ -3,7 +3,7 @@ import { execFileSync } from 'node:child_process';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const KIT_PREFIXES = ['openspec/', 'specs/', '.specify/', '.claude/'];
+const KIT_PREFIXES = ['openspec/', 'specs/', '.specify/', '.claude/', 'cr/'];
 
 export const categoryOf = (path) => {
   if (KIT_PREFIXES.some((prefix) => path.startsWith(prefix))) {

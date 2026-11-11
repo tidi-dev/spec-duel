@@ -5,7 +5,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { categoryOf } from './change-stats.mjs';
 
-const KITS = ['openspec', 'speckit'];
+export const KITS = Object.keys(JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), 'phases.json'), 'utf8')));
 const SUMMED = ['wallMs', 'turns', 'inputTokens', 'outputTokens', 'cacheReadTokens', 'cacheCreationTokens', 'costUsd'];
 const FROM_TAG = { 1: 'kit-installed', 2: 'change-1-done', 3: 'change-2-done' };
 const TEXT_LIMIT = 400;
@@ -69,11 +69,16 @@ const titleOf = (path) => {
   if (change) return `change: ${change[1]}`;
   const feature = /^specs\/(\d+)-[^/]+\/(.+)$/.exec(path);
   if (feature) return `${feature[1]}: ${feature[2]}`;
+  const crLiving = /^cr\/specs\/([^/]+)\.md$/.exec(path);
+  if (crLiving) return `living spec: ${crLiving[1]}`;
+  const crChange = /^cr\/changes\/(?:archive\/)?([^/]+)\/change\.md$/.exec(path);
+  if (crChange) return `change: ${crChange[1]}`;
   return path;
 };
 
 const DOCUMENT_ORDER = [
   /proposal\.md$/, /design\.md$/, /^openspec\/.*\/tasks\.md$/, /^openspec\/changes\/.*\/specs\//, /^openspec\/specs\//,
+  /^cr\/changes\//, /^cr\/specs\//,
   /\/spec\.md$/, /\/plan\.md$/, /^specs\/.*\/tasks\.md$/, /\/research\.md$/, /data-model\.md$/, /quickstart\.md$/, /\/contracts\//, /\/checklists\//,
 ];
 const rankOf = (path) => {
@@ -81,12 +86,16 @@ const rankOf = (path) => {
   return rank === -1 ? DOCUMENT_ORDER.length : rank;
 };
 
-const documentsOf = (variant, change) => {
-  if (!existsSync(variant)) {
-    return [];
-  }
+const storedDocuments = (runsDir, kit, change) => readJson(join(runsDir, 'timelines', `change-${change}.json`))?.kits?.[kit]?.documents ?? [];
+
+const hasTag = (variant, tag) => git(variant, ['rev-parse', '--verify', '--quiet', `refs/tags/${tag}`]).trim() !== '';
+
+const documentsOf = (variant, change, stored) => {
   const from = FROM_TAG[change];
   const to = `change-${change}-done`;
+  if (!existsSync(variant) || !hasTag(variant, from) || !hasTag(variant, to)) {
+    return stored;
+  }
   const present = new Set(git(variant, ['ls-tree', '-r', '--name-only', to]).split('\n'));
   return git(variant, ['diff', '--numstat', `${from}..${to}`])
     .split('\n')
@@ -114,6 +123,14 @@ const countInterventions = (kitDir, change) => {
   return counts;
 };
 
+const interruptedSteps = (kitDir, change) =>
+  new Set(
+    readLines(join(kitDir, 'interventions.jsonl'))
+      .map((line) => JSON.parse(line))
+      .filter((entry) => String(entry.change) === String(change) && entry.kind === 'interruption')
+      .map((entry) => entry.step),
+  );
+
 const kitTimeline = (runsDir, kit, change, variantsDir) => {
   const kitDir = join(runsDir, kit);
   const stepDir = join(kitDir, `change-${change}`);
@@ -126,13 +143,25 @@ const kitTimeline = (runsDir, kit, change, variantsDir) => {
   const totals = { ...Object.fromEntries(SUMMED.map((key) => [key, 0])), ...countInterventions(kitDir, change), filesWritten: 0 };
   const phases = [];
   const events = [];
+  const interrupted = interruptedSteps(kitDir, change);
   let offset = 0;
   for (const { name, record } of records) {
-    phases.push({
-      phase: record.phase, step: record.step, round: record.round, status: record.status,
-      startMs: offset, endMs: offset + record.wallMs,
-      tokens: (record.inputTokens ?? 0) + (record.outputTokens ?? 0), costUsd: record.costUsd ?? 0, turns: record.turns ?? 0,
-    });
+    const tokens = (record.inputTokens ?? 0) + (record.outputTokens ?? 0);
+    const previous = phases.at(-1);
+    if (record.resumedFrom && interrupted.has(record.step) && previous?.step === record.step) {
+      previous.endMs += record.wallMs;
+      previous.tokens += tokens;
+      previous.costUsd += record.costUsd ?? 0;
+      previous.turns += record.turns ?? 0;
+      previous.status = record.status;
+      previous.parts += 1;
+    } else {
+      phases.push({
+        phase: record.phase, step: record.step, round: record.round, status: record.status, parts: 1,
+        startMs: offset, endMs: offset + record.wallMs,
+        tokens, costUsd: record.costUsd ?? 0, turns: record.turns ?? 0,
+      });
+    }
     events.push(...eventsOf(join(stepDir, name.replace('.record.json', '.events.jsonl')), kit, Date.parse(record.startedAt), offset));
     for (const key of SUMMED) {
       totals[key] += record[key] ?? 0;
@@ -144,7 +173,7 @@ const kitTimeline = (runsDir, kit, change, variantsDir) => {
   const status = records.length === 0 ? 'missing' : last.status === 'ok' ? 'recorded' : 'partial';
   return {
     status, totals, phases, events,
-    documents: documentsOf(join(variantsDir, `${kit}-variant`), change),
+    documents: documentsOf(join(variantsDir, `${kit}-variant`), change, storedDocuments(runsDir, kit, change)),
     diffStat: readJson(join(stepDir, 'stats.json')),
     verify: readJson(join(stepDir, 'verify.json')),
     acceptance: readJson(join(stepDir, 'acceptance-summary.json')),
@@ -169,6 +198,6 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   for (const change of ['1', '2', '3']) {
     const timeline = buildTimeline(runsDir, change, { variantsDir: resolve(runsDir, '..') });
     writeFileSync(join(runsDir, 'timelines', `change-${change}.json`), `${JSON.stringify(timeline)}\n`);
-    process.stderr.write(`build-timeline: change ${change}: openspec ${timeline.kits.openspec.status}, speckit ${timeline.kits.speckit.status}\n`);
+    process.stderr.write(`build-timeline: change ${change}: ${KITS.map((kit) => `${kit} ${timeline.kits[kit].status}`).join(', ')}\n`);
   }
 }

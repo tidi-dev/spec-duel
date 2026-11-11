@@ -1,0 +1,36 @@
+{
+  "name": "room",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/room/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/room",
+        "main": "apps/room/src/main.ts",
+        "tsConfig": "apps/room/tsconfig.app.json",
+        "webpackConfig": "apps/room/webpack.config.js",
+        "assets": []
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "options": { "buildTarget": "room:build" }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": { "lintFilePatterns": ["apps/room/**/*.ts"], "maxWarnings": 0 }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": { "jestConfig": "apps/room/jest.config.ts", "passWithNoTests": false }
+    }
+  }
+}

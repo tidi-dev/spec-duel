@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# One entry point for the demo: start, stop, check and test both kit variants, and run the console.
+# One entry point for the demo: start, stop, check and test the three kit variants, and run the console.
 set -uo pipefail
 
 ROOT="$(cd "$(dirname "$0")" && pwd)"
@@ -10,7 +10,7 @@ usage() {
   cat <<'EOF'
 Usage: ./demo.sh <command> [target...]
 
-Targets: openspec, speckit, baseline. Default: openspec speckit.
+Targets: openspec, speckit, cyberrock, baseline. Default: openspec speckit cyberrock.
 
 Commands:
   up [targets]       Start the stacks (infra, migrations, build, all apps) and the console.
@@ -24,22 +24,22 @@ EOF
 }
 
 dir_of() { if [ "$1" = baseline ]; then echo "$ROOT/baseline"; else echo "$ROOT/$1-variant"; fi; }
-gateway_port() { case "$1" in baseline) echo 3100 ;; openspec) echo 3110 ;; speckit) echo 3120 ;; esac; }
-web_port() { case "$1" in baseline) echo 4200 ;; openspec) echo 4210 ;; speckit) echo 4220 ;; esac; }
-label() { case "$1" in baseline) echo "Baseline (before either kit)" ;; openspec) echo "OpenSpec variant" ;; speckit) echo "Spec Kit variant" ;; esac; }
+gateway_port() { case "$1" in baseline) echo 3100 ;; openspec) echo 3110 ;; speckit) echo 3120 ;; cyberrock) echo 3130 ;; esac; }
+web_port() { case "$1" in baseline) echo 4200 ;; openspec) echo 4210 ;; speckit) echo 4220 ;; cyberrock) echo 4230 ;; esac; }
+label() { case "$1" in baseline) echo "Baseline (before any kit)" ;; openspec) echo "OpenSpec variant" ;; speckit) echo "Spec Kit variant" ;; cyberrock) echo "CyberRock kit variant" ;; esac; }
 
 is_up() { curl -fs -o /dev/null --max-time 2 "http://localhost:$(gateway_port "$1")/api/health/gateway"; }
 console_up() { curl -fs -o /dev/null --max-time 2 "http://127.0.0.1:${CONSOLE_PORT}/api/scenes"; }
 
 targets_from() {
   if [ $# -eq 0 ]; then
-    echo "openspec speckit"
+    echo "openspec speckit cyberrock"
     return
   fi
   for target in "$@"; do
     case "$target" in
-      openspec | speckit | baseline) ;;
-      *) echo "Unknown target: $target (use openspec, speckit or baseline)" >&2; exit 2 ;;
+      openspec | speckit | cyberrock | baseline) ;;
+      *) echo "Unknown target: $target (use openspec, speckit, cyberrock or baseline)" >&2; exit 2 ;;
     esac
   done
   echo "$@"
@@ -145,7 +145,7 @@ cmd_up() {
 
 cmd_down() {
   local targets
-  if [ $# -eq 0 ]; then targets="openspec speckit baseline"; else targets="$(targets_from "$@")"; fi
+  if [ $# -eq 0 ]; then targets="openspec speckit cyberrock baseline"; else targets="$(targets_from "$@")"; fi
   for target in $targets; do
     local dir
     dir="$(dir_of "$target")"
@@ -174,7 +174,7 @@ cmd_reset() {
 }
 
 cmd_status() {
-  for target in openspec speckit baseline; do
+  for target in openspec speckit cyberrock baseline; do
     local containers
     containers="$(cd "$(dir_of "$target")" && docker compose ps -q 2>/dev/null | wc -l | tr -d ' ')"
     if is_up "$target"; then

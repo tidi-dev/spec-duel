@@ -23,6 +23,7 @@ before(async () => {
   record(runsDir, 'openspec', 1);
   record(runsDir, 'speckit', 1);
   record(runsDir, 'speckit', 3);
+  record(runsDir, 'cyberrock', 1);
   server = await startConsole({ port: 0, runsDir, variantsDir: runsDir });
   base = `http://127.0.0.1:${server.address().port}`;
 });
@@ -37,23 +38,25 @@ test('lists the three scenes with each kit status', async () => {
   const scenes = await (await fetch(`${base}/api/scenes`)).json();
 
   assert.deepEqual(scenes.map((scene) => scene.change), ['1', '2', '3']);
-  assert.deepEqual(scenes[0].kits, { openspec: 'recorded', speckit: 'recorded' });
-  assert.deepEqual(scenes[1].kits, { openspec: 'missing', speckit: 'missing' });
+  assert.deepEqual(scenes[0].kits, { openspec: 'recorded', speckit: 'recorded', cyberrock: 'recorded' });
+  assert.deepEqual(scenes[1].kits, { openspec: 'missing', speckit: 'missing', cyberrock: 'missing' });
   assert.equal(scenes[0].title, 'Feature');
 });
 
-test('a scene with one kit missing still returns the other kit intact', async () => {
+test('a scene with kits missing still returns the recorded kit intact', async () => {
   const scene = await (await fetch(`${base}/api/scenes/3`)).json();
 
   assert.equal(scene.kits.openspec.status, 'missing');
+  assert.equal(scene.kits.cyberrock.status, 'missing');
   assert.equal(scene.kits.speckit.status, 'recorded');
   assert.equal(scene.kits.speckit.totals.costUsd, 0.5);
 });
 
-test('serves the page and its three assets, and nothing else from disk', async () => {
+test('serves the page and its assets, and nothing else from disk', async () => {
   assert.equal((await fetch(`${base}/`)).status, 200);
   assert.equal((await fetch(`${base}/console.js`)).status, 200);
   assert.equal((await fetch(`${base}/console.css`)).status, 200);
+  assert.equal((await fetch(`${base}/kits.js`)).status, 200);
   const intros = await fetch(`${base}/scene-intros.js`);
   assert.equal(intros.status, 200);
   assert.match(intros.headers.get('content-type'), /^text\/javascript/);

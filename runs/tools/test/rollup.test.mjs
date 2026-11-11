@@ -23,6 +23,7 @@ test('sums records per phase, per change and per kit', () => {
   write(root, record({ step: 'apply', phase: 'implement', wallMs: 3000, costUsd: 1.5, turns: 5 }));
   write(root, record({ step: 'apply', phase: 'implement', round: 2, wallMs: 500, costUsd: 0.25, turns: 1 }));
   write(root, record({ kit: 'speckit', step: 'specify', wallMs: 2000, costUsd: 2 }));
+  write(root, record({ kit: 'cyberrock', wallMs: 700, costUsd: 0.75 }));
 
   const metrics = rollup(root);
 
@@ -35,6 +36,8 @@ test('sums records per phase, per change and per kit', () => {
   assert.equal(openspec.changes['1'].totals.turns, 8);
   assert.equal(openspec.totals.wallMs, 4500);
   assert.equal(metrics.kits.speckit.totals.costUsd, 2);
+  assert.equal(metrics.kits.cyberrock.totals.costUsd, 0.75);
+  assert.deepEqual(Object.keys(metrics.kits), ['openspec', 'speckit', 'cyberrock']);
   assert.equal(metrics.kits.speckit.changes['1'].totals.inputTokens, 10);
 });
 

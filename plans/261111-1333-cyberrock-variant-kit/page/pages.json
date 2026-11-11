@@ -1,0 +1,19 @@
+{
+  "pages": {
+    "evaluation": {
+      "src": "reports/cyberrock-variant-evaluation.md",
+      "title": "CyberRock Kit Evaluation",
+      "h1": "The CyberRock kit: why it exists, how it differs and how it did",
+      "lede": "After comparing OpenSpec and Spec Kit on the same three changes, we built a kit of our own from what both did well and what both got wrong. This report explains why, how it differs, and how it did under the same rules.",
+      "switch": true,
+      "text": "cr-only",
+      "intro": "intro-evaluation.html"
+    }
+  },
+  "links": {
+    "evaluation": "https://claude.ai/artifact/Gi22wVojhqjsC6xLPfDSY3",
+    "original code audit": "https://claude.ai/artifact/J69PYSozk2S47BbKJwgtzN",
+    "original summary": "https://claude.ai/artifact/RdzjJseMj16ZxsaE5jZH3K",
+    "original full report": "https://claude.ai/artifact/QfV93Wb2UZEH9wMZc33UcH"
+  }
+}

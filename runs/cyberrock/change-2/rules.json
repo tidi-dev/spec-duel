@@ -1,0 +1,40 @@
+{
+  "filesChecked": 21,
+  "interfaceDeclarations": {
+    "count": 0,
+    "files": []
+  },
+  "anyTypes": {
+    "count": 0,
+    "files": []
+  },
+  "wildcardImports": {
+    "count": 0,
+    "files": []
+  },
+  "filesOver200Lines": {
+    "count": 1,
+    "files": [
+      "apps/booking/src/booking/idempotent-booking.repository.spec.ts"
+    ]
+  },
+  "nonKebabCaseFiles": {
+    "count": 0,
+    "files": []
+  },
+  "servicesWithoutSpec": {
+    "count": 0,
+    "files": []
+  },
+  "inlineBodyTypes": {
+    "count": 0,
+    "files": []
+  },
+  "commentLines": {
+    "count": 2,
+    "files": [
+      "apps/booking/src/booking/booking.repository.ts",
+      "libs/backend-common/src/lib/entities/booking.entity.ts"
+    ]
+  }
+}

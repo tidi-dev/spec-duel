@@ -1,0 +1,80 @@
+
+ NX   Running target lint for 7 projects:
+
+- backend-common
+- contract
+- booking
+- gateway
+- worker
+- room
+- web
+
+With additional flags:
+  --skip-nx-cache=true
+
+
+
+> nx run backend-common:lint --skip-nx-cache  [existing outputs match the cache, left as is]
+
+
+Linting "backend-common"...
+
+✔ All files pass linting
+
+
+> nx run contract:lint --skip-nx-cache  [existing outputs match the cache, left as is]
+
+
+Linting "contract"...
+
+✔ All files pass linting
+
+
+> nx run booking:lint --skip-nx-cache  [existing outputs match the cache, left as is]
+
+
+Linting "booking"...
+
+✔ All files pass linting
+
+
+> nx run worker:lint --skip-nx-cache  [existing outputs match the cache, left as is]
+
+
+Linting "worker"...
+
+✔ All files pass linting
+
+
+> nx run gateway:lint --skip-nx-cache  [existing outputs match the cache, left as is]
+
+
+Linting "gateway"...
+
+✔ All files pass linting
+
+
+> nx run web:lint --skip-nx-cache  [existing outputs match the cache, left as is]
+
+
+Linting "web"...
+
+✔ All files pass linting
+
+
+> nx run room:lint --skip-nx-cache
+
+
+Linting "room"...
+
+✔ All files pass linting
+
+
+
+
+ NX   Successfully ran target lint for 7 projects
+
+Nx read the output from the cache instead of running the command for 6 out of 7 tasks.
+
+
+$ nx run-many -t lint -- --skip-nx-cache

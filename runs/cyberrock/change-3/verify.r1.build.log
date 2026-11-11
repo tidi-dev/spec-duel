@@ -1,0 +1,89 @@
+
+ NX   Running target build for 7 projects:
+
+- backend-common
+- contract
+- booking
+- gateway
+- worker
+- room
+- web
+
+With additional flags:
+  --skip-nx-cache=true
+
+
+
+> nx run contract:build --skip-nx-cache  [local cache]
+
+Your library compilation option specifies that the compiler external helper (tslib) is needed but it is not installed.
+Compiling TypeScript files for project "contract"...
+Done compiling TypeScript files for project "contract".
+
+> nx run web:build:production --skip-nx-cache  [local cache]
+
+   ▲ Next.js 15.5.28
+
+   Skipping linting
+   Checking validity of types ...
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 1625ms
+   Collecting page data ...
+   Generating static pages (0/4) ...
+   Generating static pages (1/4) 
+   Generating static pages (2/4) 
+   Generating static pages (3/4) 
+ ✓ Generating static pages (4/4)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (pages)                                 Size  First Load JS    
+┌ ƒ /                                        239 B         124 kB
+├   /_app                                      0 B         124 kB
+├ ○ /404                                     180 B         124 kB
+├ ○ /bookings (487 ms)                     31.9 kB         217 kB
+└ ○ /rooms (639 ms)                        1.82 kB         187 kB
++ First Load JS shared by all               124 kB
+  ├ chunks/framework-9e074fc6354bf2b8.js   44.9 kB
+  ├ chunks/main-c3ee5c8303a30016.js        36.6 kB
+  ├ chunks/pages/_app-5b6d699b61f0c897.js  41.6 kB
+  └ other shared chunks (total)              981 B
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+
+> nx run backend-common:build --skip-nx-cache  [local cache]
+
+Your library compilation option specifies that the compiler external helper (tslib) is needed but it is not installed.
+Compiling TypeScript files for project "backend-common"...
+Done compiling TypeScript files for project "backend-common".
+
+> nx run booking:build --skip-nx-cache  [local cache]
+
+chunk (runtime: main) main.js (main) 56.7 KiB [entry] [rendered]
+webpack compiled successfully (7b5df36793d941ed)
+
+> nx run gateway:build --skip-nx-cache  [local cache]
+
+chunk (runtime: main) main.js (main) 42.7 KiB [entry] [rendered]
+webpack compiled successfully (baba58ccfe171f4b)
+
+> nx run worker:build --skip-nx-cache  [local cache]
+
+chunk (runtime: main) main.js (main) 34.5 KiB [entry] [rendered]
+webpack compiled successfully (9e7d74977c42a8c8)
+
+> nx run room:build --skip-nx-cache
+
+chunk (runtime: main) main.js (main) 35.1 KiB [entry] [rendered]
+webpack compiled successfully (194e611b7263aac6)
+
+
+
+ NX   Successfully ran target build for 7 projects
+
+Nx read the output from the cache instead of running the command for 6 out of 7 tasks.
+
+
+$ nx run-many -t build -- --skip-nx-cache

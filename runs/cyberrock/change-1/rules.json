@@ -1,0 +1,44 @@
+{
+  "filesChecked": 70,
+  "interfaceDeclarations": {
+    "count": 0,
+    "files": []
+  },
+  "anyTypes": {
+    "count": 0,
+    "files": []
+  },
+  "wildcardImports": {
+    "count": 0,
+    "files": []
+  },
+  "filesOver200Lines": {
+    "count": 0,
+    "files": []
+  },
+  "nonKebabCaseFiles": {
+    "count": 0,
+    "files": []
+  },
+  "servicesWithoutSpec": {
+    "count": 0,
+    "files": []
+  },
+  "inlineBodyTypes": {
+    "count": 0,
+    "files": []
+  },
+  "commentLines": {
+    "count": 8,
+    "files": [
+      "apps/booking/src/booking/booking-input.ts",
+      "apps/booking/src/booking/booking.repository.ts",
+      "apps/booking/src/booking/booking.service.ts",
+      "apps/booking/src/booking/confirmation.producer.ts",
+      "apps/gateway/src/booking/idempotency-key.pipe.ts",
+      "apps/web/src/views/bookings/booking-form-schema.ts",
+      "libs/backend-common/src/lib/entities/booking.entity.ts",
+      "libs/backend-common/src/lib/entities/idempotency-key.entity.ts"
+    ]
+  }
+}

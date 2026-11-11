@@ -1,0 +1,143 @@
+
+ NX   Running target test for 7 projects:
+
+- backend-common
+- contract
+- booking
+- gateway
+- worker
+- room
+- web
+
+With additional flags:
+  --skip-nx-cache=true
+
+
+
+> nx run booking:test --skip-nx-cache  [existing outputs match the cache, left as is]
+
+ PASS   booking  apps/booking/src/booking/booking.repository.update.overlap.spec.ts (10.84 s)
+ PASS   booking  apps/booking/src/app/app.controller.spec.ts (11.028 s)
+ PASS   booking  apps/booking/src/booking/confirmation.producer.spec.ts (11.578 s)
+ PASS   booking  apps/booking/src/booking/booking.service.overlap.spec.ts (11.608 s)
+ PASS   booking  apps/booking/src/booking/booking.service.spec.ts (11.861 s)
+ PASS   booking  apps/booking/src/booking/booking.service.create.spec.ts (12.003 s)
+ PASS   booking  apps/booking/src/booking/booking-overlap.concurrency.int.spec.ts (12.082 s)
+ PASS   booking  apps/booking/src/booking/booking-input.spec.ts
+ PASS   booking  apps/booking/src/booking/booking.repository.update.spec.ts
+ PASS   booking  apps/booking/src/booking/booking-overlap.spec.ts
+ PASS   booking  apps/booking/src/booking/idempotent-booking.repository.spec.ts
+ PASS   booking  apps/booking/src/booking/booking-repositories.int.spec.ts
+ PASS   booking  apps/booking/src/booking/booking.repository.spec.ts
+ PASS   booking  apps/booking/src/booking/booking-repositories.update.int.spec.ts
+ PASS   booking  apps/booking/src/booking/booking-instant.spec.ts
+ PASS   booking  apps/booking/src/booking/booking-overlap.int.spec.ts
+ PASS   booking  apps/booking/src/booking/booking.controller.spec.ts
+ PASS   booking  apps/booking/src/booking/booking-fingerprint.spec.ts
+
+Test Suites: 18 passed, 18 total
+Tests:       184 passed, 184 total
+Snapshots:   0 total
+Time:        18 s
+Ran all test suites.
+
+> nx run backend-common:test --skip-nx-cache  [existing outputs match the cache, left as is]
+
+ PASS   backend-common  libs/backend-common/src/lib/database/booking-overlap-constraint.int.spec.ts (9.046 s)
+ PASS   backend-common  libs/backend-common/src/lib/database/booking-schema.int.spec.ts (9.241 s)
+ PASS   backend-common  libs/backend-common/src/lib/errors/rpc-exception.filter.spec.ts (9.611 s)
+ PASS   backend-common  libs/backend-common/src/lib/nats/nats-request.util.spec.ts (10.088 s)
+ PASS   backend-common  libs/backend-common/src/lib/errors/exception.helper.spec.ts (10.139 s)
+
+Test Suites: 5 passed, 5 total
+Tests:       27 passed, 27 total
+Snapshots:   0 total
+Time:        11.249 s
+Ran all test suites.
+
+> nx run contract:test --skip-nx-cache  [existing outputs match the cache, left as is]
+
+ PASS   contract  libs/contract/src/lib/contract.constants.spec.ts (6.176 s)
+ PASS   contract  libs/contract/src/lib/dto/create-booking.dto.spec.ts (7.349 s)
+ PASS   contract  libs/contract/src/lib/dto/page-query.dto.spec.ts (8.191 s)
+
+Test Suites: 3 passed, 3 total
+Tests:       18 passed, 18 total
+Snapshots:   0 total
+Time:        9.35 s
+Ran all test suites.
+
+> nx run gateway:test --skip-nx-cache  [existing outputs match the cache, left as is]
+
+ PASS   gateway  apps/gateway/src/booking/idempotency-key.pipe.spec.ts (7.497 s)
+ PASS   gateway  apps/gateway/src/booking/booking.service.spec.ts (8.137 s)
+ PASS   gateway  apps/gateway/src/app/app.controller.spec.ts (8.226 s)
+ PASS   gateway  apps/gateway/src/health/health.controller.spec.ts (8.157 s)
+ PASS   gateway  apps/gateway/src/room/room.controller.spec.ts (8.272 s)
+ PASS   gateway  apps/gateway/src/booking/booking.controller.spec.ts (8.541 s)
+
+Test Suites: 6 passed, 6 total
+Tests:       58 passed, 58 total
+Snapshots:   0 total
+Time:        9.794 s
+Ran all test suites.
+
+> nx run worker:test --skip-nx-cache  [existing outputs match the cache, left as is]
+
+ PASS   worker  apps/worker/src/confirmation/simulated-confirmation-sender.spec.ts
+ PASS   worker  apps/worker/src/confirmation/confirmation.processor.spec.ts (5.875 s)
+ PASS   worker  apps/worker/src/app/app.controller.spec.ts (6.139 s)
+
+Test Suites: 3 passed, 3 total
+Tests:       23 passed, 23 total
+Snapshots:   0 total
+Time:        8.562 s, estimated 18 s
+Ran all test suites.
+
+> nx run web:test --skip-nx-cache  [existing outputs match the cache, left as is]
+
+ PASS   web  apps/web/src/views/bookings/edit-booking-dialog.overlap.spec.tsx
+ PASS   web  apps/web/src/views/rooms/rooms-page.spec.tsx
+ PASS   web  apps/web/src/views/bookings/create-booking-form.overlap.spec.tsx
+ PASS   web  apps/web/src/views/bookings/edit-booking-dialog.spec.tsx
+ PASS   web  apps/web/src/views/bookings/bookings-table.spec.tsx
+ PASS   web  apps/web/src/views/bookings/use-all-rooms.spec.tsx
+ PASS   web  apps/web/src/views/bookings/booking-form-schema.spec.ts
+ PASS   web  apps/web/src/views/bookings/bookings-page-forms.spec.tsx
+ PASS   web  apps/web/src/layouts/app-layout.spec.tsx
+ PASS   web  apps/web/src/views/rooms/rooms-table.spec.tsx
+ PASS   web  apps/web/src/views/bookings/use-idempotency-key.spec.tsx
+ PASS   web  apps/web/src/services/api-client.spec.ts
+ PASS   web  apps/web/src/services/room.service.spec.ts
+ PASS   web  apps/web/src/views/bookings/utc-date-time.spec.ts
+ PASS   web  apps/web/src/services/booking.service.spec.ts
+ PASS   web  apps/web/src/views/bookings/bookings-page.spec.tsx
+ PASS   web  apps/web/src/views/bookings/create-booking-form.spec.tsx
+
+Test Suites: 17 passed, 17 total
+Tests:       101 passed, 101 total
+Snapshots:   0 total
+Time:        6.054 s, estimated 7 s
+Ran all test suites.
+
+> nx run room:test --skip-nx-cache
+
+ PASS   room  apps/room/src/app/app.controller.spec.ts
+ PASS   room  apps/room/src/room/room.service.spec.ts
+ PASS   room  apps/room/src/room/room.controller.spec.ts
+ PASS   room  apps/room/src/room/room.repository.spec.ts
+
+Test Suites: 4 passed, 4 total
+Tests:       18 passed, 18 total
+Snapshots:   0 total
+Time:        2.386 s, estimated 3 s
+Ran all test suites.
+
+
+
+ NX   Successfully ran target test for 7 projects
+
+Nx read the output from the cache instead of running the command for 6 out of 7 tasks.
+
+
+$ nx run-many -t test -- --skip-nx-cache

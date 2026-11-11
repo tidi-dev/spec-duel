@@ -4,7 +4,7 @@ import { mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { test } from 'node:test';
-import { changeStats } from '../change-stats.mjs';
+import { categoryOf, changeStats } from '../change-stats.mjs';
 
 const git = (repo, ...args) => execFileSync('git', ['-C', repo, '-c', 'user.name=t', '-c', 'user.email=t@example.com', ...args], { encoding: 'utf8' });
 
@@ -38,4 +38,11 @@ test('splits a change into kit artifacts, tests and code', () => {
   assert.deepEqual(stats.tests, { files: 2, added: 9, deleted: 0 });
   assert.deepEqual(stats.code, { files: 2, added: 11, deleted: 0 });
   assert.deepEqual(stats.total, { files: 8, added: 31, deleted: 0 });
+});
+
+test('files of every kit folder count as kit artifacts', () => {
+  for (const path of ['openspec/specs/a/spec.md', 'specs/001-x/plan.md', '.specify/memory/constitution.md', '.claude/skills/x/SKILL.md', 'cr/changes/add-x/change.md', 'cr/specs/bookings-api.md']) {
+    assert.equal(categoryOf(path), 'kit', path);
+  }
+  assert.equal(categoryOf('apps/room/src/cr/room.ts'), 'code');
 });

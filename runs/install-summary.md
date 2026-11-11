@@ -33,3 +33,28 @@ Date: 2026-11-10. Both variants were cloned from `baseline-v1` and are tagged `k
 - Spec Kit also wrote `.specify/integrations/claude.manifest.json`, `.specify/memory/.constitution-template.json` and `.specify/workflows/workflow-registry.json`, which the research did not list. All three are small JSON state files.
 - OpenSpec wrote exactly the expected 6 skills, 6 commands and `openspec/` tree.
 
+
+## cyberrock kit (added 2026-11-11)
+
+`cyberrock-variant/` was created from `baseline/` (the `baseline-v1.1` state), given the same 15 allow rules as the other variants, and tagged `kit-installed` after the kit was added. The kit was written for this demo; nothing was downloaded or installed.
+
+| | cyberrock kit |
+|---|---|
+| Files added | 18 (16 with content): 4 skills, 3 agents, 2 Markdown files, 4 script files, 3 script test files, 2 empty folder markers |
+| Lines added | 1,187: skills 224, agents 157, `cr/rules.md` and `cr/risks.md` 167, script 403, script tests 236 |
+| Files removed | 2: the baseline agents `nestjs-expert.md` and `nextjs-fe-developer.md` (101 lines), replaced by the `cr-` agents |
+| How it is installed | Plain files copied into the repository; no package, no virtual environment, lockfile unchanged |
+| Needed at run time | Node (already required by the project). The script imports `node:fs`, `node:path` and `node:process` only |
+| `.claude/settings.json` | Written once by the operator at install: two allow rules (`Bash(node cr/bin/cr.mjs:*)`, `Bash(node --env-file=.env node_modules/jest/bin/jest.js:*)`) and two deny rules (`Bash(git push:*)`, `Bash(git remote:*)`). The kit never writes it at run time |
+| Hooks written | None |
+| Telemetry, network | None: `grep -rnE "https?://|fetch\(|node:(http|https|net|child_process|dgram|tls)|require\(" cr/bin/cr.mjs cr/bin/lib/` finds nothing |
+| Tool pre-approval in kit files | `cr-propose`, `cr-apply`, `cr-fix`: `allowed-tools: Bash(node cr/bin/cr.mjs:*)`. `cr-review` and the agents: none |
+| Project rules | `briefs/project-rules.md` written into `cr/rules.md` by the operator, with the stack facts and conventions that the removed baseline agents held. No AI step |
+
+Checks:
+
+- Script tests: `node --test "cr/bin/test/*.test.mjs"` → 19 of 19 pass. `node cr/bin/cr.mjs validate --strict` → exit 0.
+- Variant at `kit-installed`: build, lint and test pass with the baseline counts (7 projects, 70 tests).
+- Stack: starts on gateway 3130 and web 4230 (`PORT_OFFSET=30`, compose project `roombook-cyberrock`).
+- Deny rules and headless smoke test: `runs/cyberrock/install/deny-test.md`.
+- Isolation: no OpenSpec or Spec Kit file in `cyberrock-variant/`. One sentence in `.claude/skills/THIRD-PARTY-SKILLS.md` names both projects as the source of two ideas (deltas into living specs; requirement IDs and parallel markers); it does not say a comparison is being run.

@@ -2,12 +2,12 @@
 
 For what the console shows and how to present it, see [CONSOLE.md](../CONSOLE.md) in the demo folder. This file covers only starting it and its tests.
 
-A local page that shows OpenSpec and Spec Kit doing the same change side by side, from the recordings under `runs/`.
+A local page that shows OpenSpec, Spec Kit and the CyberRock kit doing the same change side by side, from the recordings under `runs/`. The kit list, display names, step descriptions and the "where the time went" notes are in `public/kits.js`.
 
 ## Start it
 
 ```bash
-cd /workspace/spec-duel
+cd <the demo folder>               # the one that holds demo.sh
 node runs/tools/build-timeline.mjs   # optional: also writes runs/timelines/*.json
 node console/server.mjs              # http://127.0.0.1:4300
 ```
@@ -15,7 +15,7 @@ node console/server.mjs              # http://127.0.0.1:4300
 The server listens on this machine only. Open the page, pick a scene (Feature, Brownfield change, Bugfix) and press the button.
 
 - `?scene=3` in the address opens the bugfix scene directly.
-- Replay fits the longer kit's real run into about two minutes. Both columns use the same speed, so the slower kit finishes later on screen, as it did in reality.
+- Replay fits the longest kit's real run into about two minutes. All columns use the same speed, so a slower kit finishes later on screen, as it did in reality.
 - Token, cost and turn counters grow evenly within each step and land on the recorded totals; the totals are exact, the growth inside a step is interpolated.
 - The "before" and "after" room tables in the bugfix scene are the API responses captured during the real run.
 

@@ -18,6 +18,7 @@ const STEPS = {
     ],
     implement: 'implement',
   },
+  cyberrock: { first: ['propose', '/cr-propose'], rest: [['apply', '/cr-apply']], implement: 'apply' },
 };
 
 export const buildPrompts = (kit, change, briefsDir) => {

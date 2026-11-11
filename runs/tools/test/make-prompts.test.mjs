@@ -14,15 +14,17 @@ const briefs = () => {
   return dir;
 };
 
-test('both kits get the brief text byte for byte in their first step', () => {
+test('every kit gets the brief text byte for byte in its first step', () => {
   const dir = briefs();
   const brief = '# Feature\n\nBuild "it" with $pecial `chars`.\n';
 
   const openspec = buildPrompts('openspec', '1', dir);
   const speckit = buildPrompts('speckit', '1', dir);
+  const cyberrock = buildPrompts('cyberrock', '1', dir);
 
   assert.equal(openspec.propose, `/opsx:propose ${brief}`);
   assert.equal(speckit.specify, `/speckit-specify ${brief}`);
+  assert.equal(cyberrock.propose, `/cr-propose ${brief}`);
 });
 
 test('each kit gets its own step list in order', () => {
@@ -30,14 +32,17 @@ test('each kit gets its own step list in order', () => {
 
   assert.deepEqual(Object.keys(buildPrompts('openspec', '2', dir)), ['propose', 'apply', 'archive']);
   assert.deepEqual(Object.keys(buildPrompts('speckit', '2', dir)), ['specify', 'clarify', 'plan', 'tasks', 'analyze', 'implement']);
+  assert.deepEqual(Object.keys(buildPrompts('cyberrock', '2', dir)), ['propose', 'apply']);
 });
 
-test('only change 1 carries the parallel note, and only on the implementation step, identically for both kits', () => {
+test('only change 1 carries the parallel note, and only on the implementation step, identically for every kit', () => {
   const dir = briefs();
   const note = 'Do backend and frontend in parallel.\n';
 
   assert.equal(buildPrompts('openspec', '1', dir).apply, `/opsx:apply\n\n${note}`);
   assert.equal(buildPrompts('speckit', '1', dir).implement, `/speckit-implement\n\n${note}`);
+  assert.equal(buildPrompts('cyberrock', '1', dir).apply, `/cr-apply\n\n${note}`);
+  assert.equal(buildPrompts('cyberrock', '3', dir).apply, '/cr-apply');
   assert.equal(buildPrompts('openspec', '3', dir).apply, '/opsx:apply');
   assert.equal(buildPrompts('speckit', '3', dir).implement, '/speckit-implement');
   assert.equal(buildPrompts('speckit', '1', dir).plan, '/speckit-plan');
