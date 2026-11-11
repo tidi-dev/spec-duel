@@ -1,0 +1,65 @@
+{
+  "tag": "baseline-v1",
+  "commit": "4442b0ade07770fe19fe97018c7772a97ab2ffbd",
+  "taggedAt": "2026-11-10T06:57:00+00:00",
+  "verify": {
+    "build": "exit 0, 7 projects",
+    "lint": "exit 0, 7 projects",
+    "test": "exit 0, 20 suites, 70 tests"
+  },
+  "unitTestsByProject": {
+    "contract": 17,
+    "backend-common": 15,
+    "room": 11,
+    "gateway": 12,
+    "booking": 2,
+    "worker": 2,
+    "web": 11
+  },
+  "acceptanceAtBaseline": {
+    "change-1": {
+      "passed": 0,
+      "failed": 22
+    },
+    "baseline": {
+      "passed": 8,
+      "failed": 0
+    },
+    "change-3": {
+      "passed": 1,
+      "failed": 3
+    },
+    "change-2": {
+      "passed": 0,
+      "failed": 7
+    }
+  },
+  "frozen": {
+    "acceptance": {
+      "acceptance/package.json": "c817ef27e7167b11302161cd71831e5fdcc69d6840ad8e6540f78e323983d628",
+      "acceptance/tsconfig.json": "3d0885f47404d8681c1195a69d28f19bdead5d2c8413b13c1c1bc05678a90abe",
+      "acceptance/jest.config.js": "0bfd53bc22e98b10f7c1bb5815b4b6caeb4c4a6214bb3c74dc687783d83e6f06",
+      "acceptance/README.md": "2d6f34dfd55c939c102bdad64cc346850722982e4afb529879cb77869c73207d",
+      "acceptance/src/baseline/health.spec.ts": "facf2a05f651290dd8baa49b7f254c8e20378923bbcc5da718384cc4a05f6f8c",
+      "acceptance/src/baseline/rooms.spec.ts": "24158740bd704419b7799340480e6ad85c82320d451f8c09fa407eb56c683efd",
+      "acceptance/src/change-1/bookings-crud.spec.ts": "c8aef68cb08596a9f6a042a4168ee436c816b31e427098bd6ad9068b13753643",
+      "acceptance/src/change-1/confirmation.spec.ts": "1c037720fde08592de7d3a7823060c49273b17827c78a3a4b71e44bbf9002b70",
+      "acceptance/src/change-1/idempotency.spec.ts": "1c1c9897864b4809eee3971d384bb50846b647a24388eb3d2fac9464d44279fe",
+      "acceptance/src/change-2/overlap.spec.ts": "22d8c962e00f680f8b3ce6cd3d92dcb52959830f97d1a3e8d2199d498c9e6de6",
+      "acceptance/src/change-3/rooms-paging.spec.ts": "5c22a3cd35ead789a7cf5d87d1035126d579cc23abb20c197ee2b6eadf4d0ba0",
+      "acceptance/src/support/bookings.ts": "b80e4b7926e8d33c1c44b7df3eb2c3e42fab7f7ef826ed90a99c2e31d981b718",
+      "acceptance/src/support/http.ts": "3ad46df7225af5235b54803bc15bdee3ab3bdd789e1ded0a5117c16708c0c1a5",
+      "acceptance/src/support/poll.ts": "2c30e01465b14926a8afaf6a9ae39ee79ffa397b17cd478c4c2f13e28e92a5ba",
+      "acceptance/src/support/slots.ts": "e571c902fc49184135632cb4480defc2cb1161fea785d5def5ba2dcf3cadbcaf",
+      "acceptance/pnpm-lock.yaml": "6d0fa1ed8c0c9588e445c51a60651bdca50c4885b7f3f20584ad201f0156a934"
+    },
+    "briefs": {
+      "plans/261110-1210-openspec-vs-spec-kit-demo/briefs/01-feature.md": "1dfce5fa9e0669f954a4a18e06be86e4b5fe2e532b6881ab4172eacfa652c081",
+      "plans/261110-1210-openspec-vs-spec-kit-demo/briefs/02-brownfield.md": "75ba64a2a4b3fb1e1790d103bbd55de75166d64df4c84a29ad335663ea9c7e74",
+      "plans/261110-1210-openspec-vs-spec-kit-demo/briefs/03-bugfix.md": "06a8df61a4364345a1dcf2f21ecbd50f6c37179dd618d18eac1ce5b1dbab4002",
+      "plans/261110-1210-openspec-vs-spec-kit-demo/briefs/operator-answers.md": "43ec88345a47db225dd5182f2c98cf32ee807ad2ad222b7d19ca20102e0b6ec7",
+      "plans/261110-1210-openspec-vs-spec-kit-demo/briefs/parallel-note.md": "8ac48bf451ef24328a22db120c410d6bbef1a10df9f5e1c293717ffd4fc9f775",
+      "plans/261110-1210-openspec-vs-spec-kit-demo/briefs/project-rules.md": "f2c061c8af9abce94d9ec78d80b0b17ae0b7ecf274831f7819977bd1de15c6ee"
+    }
+  }
+}

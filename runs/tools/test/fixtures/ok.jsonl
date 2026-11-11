@@ -1,0 +1,4 @@
+{"type":"system","subtype":"init","session_id":"sess-1","model":"claude-fable-5-2"}
+{"type":"assistant","message":{"content":[{"type":"text","text":"Working on it."}]},"session_id":"sess-1"}
+{"type":"assistant","message":{"content":[{"type":"tool_use","name":"Write","input":{"file_path":"/x/spec.md"}}]},"session_id":"sess-1"}
+{"type":"result","subtype":"success","is_error":false,"duration_ms":4200,"duration_api_ms":3900,"num_turns":3,"result":"Done.","session_id":"sess-1","total_cost_usd":0.125,"usage":{"input_tokens":100,"output_tokens":50,"cache_read_input_tokens":2000,"cache_creation_input_tokens":300},"permission_denials":[{"tool_name":"Bash","tool_input":{"command":"openspec feedback --help"}}]}

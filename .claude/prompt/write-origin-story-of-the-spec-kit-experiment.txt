@@ -1,0 +1,95 @@
+# Task: Write ORIGIN-STORY.md, the story of why this project exists and how it was run
+
+## Context
+
+This folder (`/workspace/spec-duel`) compares two AI spec-driven development frameworks, OpenSpec and GitHub Spec Kit, on the same small codebase (roombook). The existing docs explain how to run it (`README.md`, `SETUP.md`, `CONSOLE.md`) and what came out of it (the reports). None of them tells the story in one place: why the project exists, what the idea was, the order in which things were done, and what each step taught.
+
+Write that story as a new file in the project root: `ORIGIN-STORY.md`. It sits beside `README.md`, `SETUP.md` and `CONSOLE.md` and follows their uppercase naming.
+
+## Objective
+
+A reader who has never seen this project should finish `ORIGIN-STORY.md` understanding:
+
+1. what question started it,
+2. how the experiment was designed to answer that question fairly,
+3. what happened at each stage,
+4. what was learned, with the headline numbers,
+5. where to go next for detail.
+
+## The story to tell, in this order
+
+Keep all five stages. They are the owner's own outline:
+
+1. **The question.** The owner wanted to compare two spec frameworks, OpenSpec and GitHub Spec Kit, to decide which one the team should adopt.
+2. **The idea: AI only, no human code.** Both frameworks build the same features from scratch, driven only by Claude, with no code written or fixed by a person. Explain how fairness was kept: one frozen starting codebase (`baseline-v1`), two isolated copies, word-for-word identical briefs, a hidden acceptance suite never shown to either kit, and every step recorded.
+3. **Beyond greenfield.** After the from-scratch feature (room bookings), see how each framework's AI handles real-life follow-up work: a brownfield change to behaviour it had specified itself (no double-booked rooms), and a bugfix (wrong rooms on page 2).
+4. **How effective each framework is.** Analyse how well each framework works with AI given its own setup: the skills, slash commands and documents it installs, and its process steps. Cover time, cost, tokens, documents written, human interventions, a quality check that runs without AI, and how each one keeps its specs current.
+5. **A second opinion on the code.** The owner replicated the open-source Ponytail skills (https://github.com/DietrichGebert/ponytail) as the local `lean-change`, `lean-audit`, `lean-review` and `lean-debt` skills: read, adapted and rewritten, not installed. They were used to run an independent code audit and review of what each kit wrote, with two reviewers in parallel and a cross-check.
+
+End with what was concluded (the recommendation) and what is still open.
+
+## Sources (read before writing; do not invent)
+
+- `README.md`, `SETUP.md`, `CONSOLE.md`
+- `reports/openspec-vs-spec-kit-comparison.md` (process results)
+- `reports/openspec-vs-spec-kit-code-audit.md` (code audit results)
+- `plans/261110-1210-openspec-vs-spec-kit-demo/` (`plan.md`, `design.md`, `research.md` if present, `briefs/`)
+- `runs/notes.md` (what went wrong during the runs and how it was handled)
+- `.claude/skills/THIRD-PARTY-SKILLS.md` (the Ponytail section) and `.claude/skills/lean-*/SKILL.md`
+- The published pages, to link to and not to copy:
+  - Board summary: https://claude.ai/artifact/RdzjJseMj16ZxsaE5jZH3K
+  - Full report with evidence: https://claude.ai/artifact/QfV93Wb2UZEH9wMZc33UcH
+  - Code audit: https://claude.ai/artifact/J69PYSozk2S47BbKJwgtzN
+
+## Facts to check against the sources, not to assume
+
+- **"No human code" must be stated exactly as it happened.** The baseline was built once, before either kit ran, by Claude agents without either kit (see the full report, section 4.5). The kits then did all three changes with no hand fixes (`runs/<kit>/change-<n>/verify.json`, the "no hand fixes" rule). Check the sources and say precisely who wrote what; do not claim more than they show.
+- Take every number from the reports, not from memory. Headline figures to confirm:
+  - hidden tests 41 of 41 for both kits;
+  - three changes: OpenSpec 48 min 41 s and $36.13, Spec Kit 1 h 12 min 52 s and $55.53;
+  - kit documents: 2,034 against 3,770 lines;
+  - code audit score 40 against 37 out of 50; findings 11 (0 high) against 14 (1 high).
+- Kit versions: OpenSpec 1.16.1, Spec Kit 1.3.3. Ponytail commit `96608e0`, MIT licence.
+- Mention the honest limits briefly: one run per kit, one model, the API fixed in advance, and Spec Kit's lighter bug path not tested.
+
+## Style
+
+- Plain English, short sentences, everyday words. Explain a term the first time you use it (spec-driven development, brownfield, idempotent).
+- A narrative with a clear order, not a second report: tell what happened and why, and leave the full tables in the reports. A small table for the headline numbers is fine.
+- Use the same Markdown style as `README.md`: `##` sections, short tables, relative links to files.
+- Neutral tone, no marketing words. Separate what was measured from what is judgement.
+- Aim for about 120 to 200 lines.
+
+Suggested sections (adapt if the story reads better another way):
+
+1. Why this exists
+2. The idea: let the AI do all the work
+3. Setting up a fair test
+4. Three jobs: a feature, a change, a bug
+5. What each framework's setup cost and gave back
+6. A second look at the code (the Ponytail replica)
+7. What we concluded
+8. What is still open
+9. Where to read more
+
+## Constraints
+
+- Create only `ORIGIN-STORY.md`. Do not edit any other file. If you think `README.md` should link to the new file, propose the one-line change in your reply and wait for approval.
+- Do not modify `openspec-variant/`, `speckit-variant/`, `baseline/`, `runs/` or the reports.
+- Never read, print or copy values from `.env*` files. Include no secrets, tokens or personal data. Keep the existing references to the Jira ticket (ACME-1) and to Acme only as the other docs already state them; add no internal detail beyond that.
+- Do not publish the file anywhere and do not send its content to an external service.
+- If a source contradicts this outline, follow the source and say so in your reply.
+
+## Acceptance criteria
+
+- [ ] `ORIGIN-STORY.md` exists in the project root and covers all five stages in order, plus the conclusion and what is open.
+- [ ] Every number matches the reports; every claim about "no human code" matches the sources.
+- [ ] Ponytail is described as adapted and rewritten, not installed, with a link to the upstream repo and to `.claude/skills/THIRD-PARTY-SKILLS.md`.
+- [ ] Links to the three published pages and the local reports work.
+- [ ] Plain English, about 120 to 200 lines, consistent with `README.md` style.
+- [ ] No other file changed.
+
+## Deliverables
+
+1. `ORIGIN-STORY.md` in the project root.
+2. A short reply: the file's section list, any place where the sources differed from this outline, and the proposed one-line `README.md` link (not applied).

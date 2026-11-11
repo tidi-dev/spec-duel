@@ -1,0 +1,50 @@
+{
+  "kit": "openspec",
+  "change": "1",
+  "step": "archive",
+  "phase": "close",
+  "round": 1,
+  "model": "claude-fable-5-2",
+  "resumedFrom": null,
+  "startedAt": "2026-11-10T07:55:54.927Z",
+  "endedAt": "2026-11-10T07:56:14.669Z",
+  "wallMs": 19742,
+  "exitCode": 0,
+  "status": "ok",
+  "sessionId": "4bf70af1-be8e-4335-ac71-ad94eb004f8a",
+  "turns": 6,
+  "apiMs": 17038,
+  "inputTokens": 8,
+  "outputTokens": 1578,
+  "cacheReadTokens": 175195,
+  "cacheCreationTokens": 43924,
+  "costUsd": 0.801007,
+  "modelUsage": {
+    "claude-fable-5-2": {
+      "inputTokens": 8,
+      "outputTokens": 1578,
+      "cacheReadInputTokens": 175195,
+      "cacheCreationInputTokens": 43924,
+      "webSearchRequests": 0,
+      "costUSD": 0.801007,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 264,
+      "cacheCreationEphemeral5mInputTokens": 0,
+      "cacheCreationEphemeral1hInputTokens": 43924,
+      "canonicalModel": "claude-fable-5-2",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permissionDenials": [
+    {
+      "tool": "Bash",
+      "input": {
+        "command": "openspec list --json; echo \"---\"; openspec instructions archive --change \"add-room-bookings\" --json; echo \"--- exit $?\"; openspec status --change \"add-room-bookings\" --json",
+        "description": "List OpenSpec changes and load archive inputs and status"
+      }
+    }
+  ],
+  "resultText": "**Using change: `add-room-bookings`** (the only active change; override with `/opsx:archive <other>`). Nothing has been written or moved yet, because the archive step needs two answers from you.\n\n## 1. Four tasks are still unchecked (30 of 34 complete)\n\nAll four planning artifacts (proposal, specs, design, tasks) are done. The open tasks are the manual checks against the running stack:\n\n- **8.2** Walk the `bookings-api` scenarios through the gateway with `curl`.\n- **8.3** Verify the `booking-idempotency` scenarios, including the ten parallel identical requests.\n- **8.4** Verify the `booking-confirmation` outcomes (`SENT`, retry, bounce, deleted booking).\n- **8.5** Walk `/bookings` in the web app, then stop the stack.\n\n**Do you want to archive with these four tasks incomplete?** If you confirm, they will be recorded as a warning in the archive summary. The alternative is to cancel, run section 8 through `/opsx:apply`, and archive afterwards.\n\n## 2. Delta specs are not synced yet\n\n`openspec/specs/` is empty, so all four capabilities are new and each sync would create a main spec from ADDED requirements only. None is sync-blocked.\n\n| Capability | Requirements to add | Result |\n|---|---|---|\n| `bookings-api` | 10 | new main spec will be created |\n| `booking-idempotency` | 7 | new main spec will be created |\n| `booking-confirmation` | 6 | new main spec will be created |\n| `bookings-page` | 8 | new main spec will be created |\n\n**Which do you want?**\n\n- **Sync now (recommended)**: create the four main specs, verify them, then archive.\n- **Archive without syncing**: move the change and leave `openspec/specs/` empty.\n\nReply with, for example, \"confirm, sync now\" and I will sync, verify and move the change to `openspec/changes/archive/2026-11-10-add-room-bookings/`."
+}

@@ -1,0 +1,37 @@
+{
+  "filesChecked": 78,
+  "interfaceDeclarations": {
+    "count": 0,
+    "files": []
+  },
+  "anyTypes": {
+    "count": 0,
+    "files": []
+  },
+  "wildcardImports": {
+    "count": 0,
+    "files": []
+  },
+  "filesOver200Lines": {
+    "count": 0,
+    "files": []
+  },
+  "nonKebabCaseFiles": {
+    "count": 0,
+    "files": []
+  },
+  "servicesWithoutSpec": {
+    "count": 0,
+    "files": []
+  },
+  "inlineBodyTypes": {
+    "count": 0,
+    "files": []
+  },
+  "commentLines": {
+    "count": 1,
+    "files": [
+      "apps/gateway/src/booking/update-booking-fields.guard.ts"
+    ]
+  }
+}

@@ -1,0 +1,134 @@
+
+ NX   Running target test for 7 projects:
+
+- backend-common
+- contract
+- booking
+- gateway
+- worker
+- room
+- web
+
+With additional flags:
+  --skip-nx-cache=true
+
+
+
+> nx run contract:test --skip-nx-cache
+
+ PASS   contract  libs/contract/src/lib/contract.constants.spec.ts
+ PASS   contract  libs/contract/src/lib/dto/create-booking.dto.spec.ts
+ PASS   contract  libs/contract/src/lib/dto/page-query.dto.spec.ts
+
+Test Suites: 3 passed, 3 total
+Tests:       17 passed, 17 total
+Snapshots:   0 total
+Time:        5.928 s
+Ran all test suites.
+
+> nx run backend-common:test --skip-nx-cache
+
+ PASS   backend-common  libs/backend-common/src/lib/errors/error-response.guard.spec.ts
+ PASS   backend-common  libs/backend-common/src/lib/errors/rpc-exception.filter.spec.ts (6.425 s)
+ PASS   backend-common  libs/backend-common/src/lib/nats/nats-request.util.spec.ts (6.735 s)
+ PASS   backend-common  libs/backend-common/src/lib/errors/exception.helper.spec.ts (6.886 s)
+
+Test Suites: 4 passed, 4 total
+Tests:       24 passed, 24 total
+Snapshots:   0 total
+Time:        7.804 s, estimated 30 s
+Ran all test suites.
+
+> nx run booking:test --skip-nx-cache
+
+ PASS   booking  apps/booking/src/booking/booking-time.util.spec.ts (7.141 s)
+ PASS   booking  apps/booking/src/booking/idempotent-booking.repository.spec.ts (7.146 s)
+ PASS   booking  apps/booking/src/app/app.controller.spec.ts (7.277 s)
+ PASS   booking  apps/booking/src/booking/booking.mapper.spec.ts (7.37 s)
+ PASS   booking  apps/booking/src/booking/confirmation-queue.producer.spec.ts (7.318 s)
+ PASS   booking  apps/booking/src/booking/booking.validator.spec.ts (7.346 s)
+ PASS   booking  apps/booking/src/booking/room-lookup.client.spec.ts (7.765 s)
+ PASS   booking  apps/booking/src/booking/booking-fingerprint.util.spec.ts
+ PASS   booking  apps/booking/src/booking/booking.repository.spec.ts
+ PASS   booking  apps/booking/src/booking/booking.controller.spec.ts
+ PASS   booking  apps/booking/src/booking/booking.service.spec.ts
+ PASS   booking  apps/booking/src/booking/booking.service.create.spec.ts
+
+Test Suites: 12 passed, 12 total
+Tests:       81 passed, 81 total
+Snapshots:   0 total
+Time:        9.34 s, estimated 51 s
+Ran all test suites.
+
+> nx run gateway:test --skip-nx-cache
+
+ PASS   gateway  apps/gateway/src/booking/idempotency-replayed.interceptor.spec.ts
+ PASS   gateway  apps/gateway/src/booking/idempotency-key.guard.spec.ts (6.555 s)
+ PASS   gateway  apps/gateway/src/app/app.controller.spec.ts (6.85 s)
+ PASS   gateway  apps/gateway/src/health/health.controller.spec.ts (7.265 s)
+ PASS   gateway  apps/gateway/src/booking/booking.controller.spec.ts (7.612 s)
+ PASS   gateway  apps/gateway/src/room/room.controller.spec.ts (7.838 s)
+
+Test Suites: 6 passed, 6 total
+Tests:       50 passed, 50 total
+Snapshots:   0 total
+Time:        8.863 s, estimated 50 s
+Ran all test suites.
+
+> nx run worker:test --skip-nx-cache
+
+ PASS   worker  apps/worker/src/confirmation/simulated-confirmation.sender.spec.ts (5.223 s)
+ PASS   worker  apps/worker/src/confirmation/booking.client.spec.ts (7.286 s)
+ PASS   worker  apps/worker/src/app/app.controller.spec.ts (7.601 s)
+ PASS   worker  apps/worker/src/confirmation/confirmation.service.spec.ts (7.647 s)
+ PASS   worker  apps/worker/src/confirmation/confirmation.processor.spec.ts (7.777 s)
+
+Test Suites: 5 passed, 5 total
+Tests:       39 passed, 39 total
+Snapshots:   0 total
+Time:        8.81 s, estimated 17 s
+Ran all test suites.
+
+> nx run room:test --skip-nx-cache
+
+ PASS   room  apps/room/src/room/room.repository.spec.ts (6.13 s)
+ PASS   room  apps/room/src/app/app.controller.spec.ts (6.028 s)
+ PASS   room  apps/room/src/room/room.controller.spec.ts (5.885 s)
+ PASS   room  apps/room/src/room/room.service.spec.ts (6.071 s)
+
+Test Suites: 4 passed, 4 total
+Tests:       11 passed, 11 total
+Snapshots:   0 total
+Time:        7.527 s
+Ran all test suites.
+
+> nx run web:test --skip-nx-cache
+
+ PASS   web  apps/web/src/views/bookings/booking-room-filter.spec.tsx
+ PASS   web  apps/web/src/views/bookings/bookings-table.spec.tsx
+ PASS   web  apps/web/src/views/rooms/rooms-page.spec.tsx
+ PASS   web  apps/web/src/layouts/app-layout.spec.tsx
+ PASS   web  apps/web/src/views/bookings/booking-edit-dialog.spec.tsx
+ PASS   web  apps/web/src/views/bookings/booking-delete-dialog.spec.tsx
+ PASS   web  apps/web/src/services/api-client.spec.ts
+ PASS   web  apps/web/src/views/rooms/rooms-table.spec.tsx
+ PASS   web  apps/web/src/services/room.service.spec.ts
+ PASS   web  apps/web/src/views/bookings/booking-time-format.spec.ts
+ PASS   web  apps/web/src/services/booking.service.spec.ts
+ PASS   web  apps/web/src/views/bookings/bookings-page.spec.tsx
+ PASS   web  apps/web/src/views/bookings/booking-create-form.spec.tsx
+ PASS   web  apps/web/src/views/bookings/bookings-page-actions.spec.tsx
+
+Test Suites: 14 passed, 14 total
+Tests:       65 passed, 65 total
+Snapshots:   0 total
+Time:        5.697 s, estimated 17 s
+Ran all test suites.
+
+
+
+ NX   Successfully ran target test for 7 projects
+
+
+
+$ nx run-many -t test -- --skip-nx-cache

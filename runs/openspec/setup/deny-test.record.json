@@ -1,0 +1,57 @@
+{
+  "kit": "openspec",
+  "change": "setup",
+  "step": "deny-test",
+  "phase": "setup",
+  "round": 1,
+  "model": "claude-fable-5-2",
+  "resumedFrom": null,
+  "startedAt": "2026-11-10T07:10:27.050Z",
+  "endedAt": "2026-11-10T07:10:36.460Z",
+  "wallMs": 9410,
+  "exitCode": 0,
+  "status": "ok",
+  "sessionId": "c39243a7-df32-4438-8a54-cd0c583b6955",
+  "turns": 3,
+  "apiMs": 6477,
+  "inputTokens": 6,
+  "outputTokens": 270,
+  "cacheReadTokens": 116357,
+  "cacheCreationTokens": 42515,
+  "costUsd": 0.7143594,
+  "modelUsage": {
+    "claude-fable-5-2": {
+      "inputTokens": 6,
+      "outputTokens": 270,
+      "cacheReadInputTokens": 116357,
+      "cacheCreationInputTokens": 42515,
+      "webSearchRequests": 0,
+      "costUSD": 0.7143594,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "cacheCreationEphemeral5mInputTokens": 0,
+      "cacheCreationEphemeral1hInputTokens": 42515,
+      "canonicalModel": "claude-fable-5-2",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permissionDenials": [
+    {
+      "tool": "Bash",
+      "input": {
+        "command": "openspec feedback --help",
+        "description": "Show help for the openspec feedback command"
+      }
+    },
+    {
+      "tool": "Bash",
+      "input": {
+        "command": "openspec install --help",
+        "description": "Show help for the openspec install command"
+      }
+    }
+  ],
+  "resultText": "- `openspec feedback --help`: **blocked** \u2014 \"Permission to use Bash with command openspec feedback --help has been denied.\"\n- `openspec install --help`: **blocked** \u2014 \"Permission to use Bash with command openspec install --help has been denied.\"\n\nNeither command ran, and I tried no alternative forms."
+}

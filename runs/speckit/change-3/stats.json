@@ -1,0 +1,22 @@
+{
+  "kit": {
+    "files": 9,
+    "added": 900,
+    "deleted": 0
+  },
+  "tests": {
+    "files": 1,
+    "added": 47,
+    "deleted": 0
+  },
+  "code": {
+    "files": 1,
+    "added": 2,
+    "deleted": 2
+  },
+  "total": {
+    "files": 11,
+    "added": 949,
+    "deleted": 2
+  }
+}

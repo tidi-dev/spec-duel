@@ -1,0 +1,36 @@
+{
+  "name": "worker",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/worker/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/worker",
+        "main": "apps/worker/src/main.ts",
+        "tsConfig": "apps/worker/tsconfig.app.json",
+        "webpackConfig": "apps/worker/webpack.config.js",
+        "assets": []
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "options": { "buildTarget": "worker:build" }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": { "lintFilePatterns": ["apps/worker/**/*.ts"], "maxWarnings": 0 }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": { "jestConfig": "apps/worker/jest.config.ts", "passWithNoTests": false }
+    }
+  }
+}

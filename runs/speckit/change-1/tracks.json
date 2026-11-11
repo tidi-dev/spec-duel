@@ -1,0 +1,20 @@
+[
+  {
+    "agent": "nestjs-expert",
+    "description": "Backend bookings tasks T002-T061",
+    "launchedAt": 1794298767116,
+    "launchedAtMs": 43480,
+    "endedAtMs": 980103,
+    "wallMs": 936623,
+    "events": 411
+  },
+  {
+    "agent": "nextjs-fe-developer",
+    "description": "Frontend bookings tasks T062-T086",
+    "launchedAt": 1794298780211,
+    "launchedAtMs": 56575,
+    "endedAtMs": 542737,
+    "wallMs": 486162,
+    "events": 156
+  }
+]

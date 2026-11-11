@@ -1,0 +1,35 @@
+{
+  "env": {
+    "OPENSPEC_TELEMETRY": "0",
+    "DO_NOT_TRACK": "1"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(pnpm nx:*)",
+      "Bash(pnpm run:*)",
+      "Bash(pnpm test:*)",
+      "Bash(npx jest:*)",
+      "Bash(npx tsc:*)",
+      "Bash(docker compose:*)",
+      "Bash(scripts/stack-up.sh)",
+      "Bash(scripts/stack-down.sh)",
+      "Bash(scripts/stack-reset.sh)",
+      "Bash(ls:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
+    ],
+    "deny": [
+      "Bash(openspec feedback:*)",
+      "Bash(openspec install:*)",
+      "Read(**/.env)",
+      "Read(**/.env.*)",
+      "Read(**/*.pem)",
+      "Read(**/*.key)",
+      "Read(~/.ssh/**)",
+      "Read(~/.aws/**)"
+    ]
+  }
+}

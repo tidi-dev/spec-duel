@@ -1,0 +1,42 @@
+{
+  "kit": "openspec",
+  "change": "setup",
+  "step": "deny-test-control",
+  "phase": "setup",
+  "round": 1,
+  "model": "claude-fable-5-2",
+  "resumedFrom": null,
+  "startedAt": "2026-11-10T07:10:50.701Z",
+  "endedAt": "2026-11-10T07:10:58.016Z",
+  "wallMs": 7315,
+  "exitCode": 0,
+  "status": "ok",
+  "sessionId": "68fc77cd-534a-4f3c-9ba3-5bea59395730",
+  "turns": 2,
+  "apiMs": 3384,
+  "inputTokens": 4,
+  "outputTokens": 113,
+  "cacheReadTokens": 67297,
+  "cacheCreationTokens": 38717,
+  "costUsd": 0.6374834,
+  "modelUsage": {
+    "claude-fable-5-2": {
+      "inputTokens": 4,
+      "outputTokens": 113,
+      "cacheReadInputTokens": 67297,
+      "cacheCreationInputTokens": 38717,
+      "webSearchRequests": 0,
+      "costUSD": 0.6374834,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "cacheCreationEphemeral5mInputTokens": 0,
+      "cacheCreationEphemeral1hInputTokens": 38717,
+      "canonicalModel": "claude-fable-5-2",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permissionDenials": [],
+  "resultText": "Ran: `openspec list --json` was not blocked \u2014 first line of output: `{`"
+}

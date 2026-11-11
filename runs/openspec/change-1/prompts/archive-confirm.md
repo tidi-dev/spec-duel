@@ -1,0 +1,1 @@
+Confirm: archive with the open tasks as they are, and sync now.

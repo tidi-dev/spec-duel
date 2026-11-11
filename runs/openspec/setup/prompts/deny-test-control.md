@@ -1,0 +1,1 @@
+/opsx:explore This is a permissions check, not an exploration. Using the Bash tool, run exactly this one shell command as a single Bash call, and nothing else: `openspec list --json`. Do not rephrase it, wrap it, or try any alternative form if it is refused. Then report in one line whether it ran (quote the first line of its output) or was blocked (quote the refusal).

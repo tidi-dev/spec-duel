@@ -1,0 +1,6 @@
+{"change":"1","step":"analyze","kind":"note","note":"analyze reported 0 critical, 3 high, findings not addressed before implement per the fixed rule (only critical triggers a revise round); kit offered to suggest edits, not taken"}
+{"change":"1","step":"implement","kind":"denied-permission","note":"kit left its 2 live-stack check tasks (T090, T091) open: curl is not on the allowlist"}
+{"change":"2","step":"analyze","kind":"interruption","note":"usage limit before the step did any work; to be re-run fresh"}
+{"change":"2","step":"implement","kind":"denied-permission","note":"kit left 5 tasks open, the ones needing the running stack"}
+{"change":"3","step":"analyze","kind":"interruption","note":"usage limit after 6 s; to be re-run fresh"}
+{"change":"3","step":"implement","kind":"denied-permission","note":"kit left 2 live-stack check tasks open; it also committed its own work because its task list included a commit"}

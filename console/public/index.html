@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kit comparison</title>
+    <link rel="stylesheet" href="/console.css" />
+  </head>
+  <body>
+    <header class="top">
+      <div class="brand">
+        <h1>OpenSpec and Spec Kit, side by side</h1>
+        <p>The same change, done by each kit on the same codebase.</p>
+      </div>
+      <nav class="scenes" id="scenes" aria-label="Scenes"></nav>
+    </header>
+
+    <main>
+      <section class="stage intro" id="intro" aria-labelledby="intro-title" hidden>
+        <h2 id="intro-title">What this scene is for</h2>
+        <p class="lead" id="intro-purpose"></p>
+        <div class="intro-grid">
+          <div><h3>Starting point</h3><ul id="intro-start"></ul></div>
+          <div><h3>The job</h3><ul id="intro-job"></ul></div>
+          <div><h3>What it shows</h3><p id="intro-shows"></p></div>
+        </div>
+      </section>
+
+      <section class="banner" id="banner" aria-live="polite"></section>
+
+      <section class="stage" id="before" hidden>
+        <h2>The bug</h2>
+        <p class="lead">Rooms page, 5 per page, page 2. It should list Room 06 to Room 10.</p>
+        <div class="rooms" id="before-rooms"></div>
+      </section>
+
+      <section class="controls">
+        <button id="run" class="primary" type="button">Play</button>
+        <button id="reset" type="button">Reset</button>
+        <span class="hint" id="hint"></span>
+      </section>
+
+      <section class="columns">
+        <article class="kit" id="kit-openspec" data-kit="openspec"></article>
+        <article class="kit" id="kit-speckit" data-kit="speckit"></article>
+      </section>
+
+      <section class="stage" id="after" hidden>
+        <h2>After the fix</h2>
+        <div class="after-grid" id="after-rooms"></div>
+      </section>
+
+      <section class="summary" id="summary" hidden>
+        <h2>Side by side</h2>
+        <table id="summary-table"></table>
+      </section>
+
+      <section class="summary" id="why" hidden>
+        <h2 id="why-title">Why Spec Kit took longer</h2>
+        <table id="why-table"></table>
+        <ol class="why-reasons" id="why-reasons"></ol>
+      </section>
+    </main>
+
+    <template id="kit-template">
+      <header class="kit-head">
+        <h2 class="kit-name"></h2>
+        <span class="badge"></span>
+      </header>
+      <div class="clock">
+        <span class="clock-now">0:00</span>
+        <span class="clock-of"></span>
+      </div>
+      <div class="strip" role="img" aria-label="Phases"></div>
+      <ol class="steps" aria-label="Steps"></ol>
+      <div class="step-detail" hidden></div>
+      <div class="phase-line">
+        <div class="phase-now"></div>
+        <div class="step-count"></div>
+      </div>
+      <p class="step-desc"></p>
+      <dl class="counters">
+        <div><dt>Tokens <button type="button" class="info" data-tip="Every token the kit used so far, including cached input it re-read and the work of agents it handed tasks to. Most are cheap cache reads, so more tokens does not always mean more cost." aria-label="What Tokens means: Every token the kit used so far, including cached input it re-read and the work of agents it handed tasks to. Most are cheap cache reads, so more tokens does not always mean more cost.">!</button></dt><dd class="c-tokens">0</dd></div>
+        <div><dt>Cost <button type="button" class="info" data-tip="Cost so far in US dollars, as Claude Code reported it at list prices. Includes the agents the kit handed tasks to." aria-label="What Cost means: Cost so far in US dollars, as Claude Code reported it at list prices. Includes the agents the kit handed tasks to.">!</button></dt><dd class="c-cost">$0.00</dd></div>
+        <div><dt>Turns <button type="button" class="info" data-tip="Rounds of the kit's main session: in each turn the model replies or calls a tool. Turns taken by the agents it handed tasks to are not counted." aria-label="What Turns means: Rounds of the kit's main session: in each turn the model replies or calls a tool. Turns taken by the agents it handed tasks to are not counted.">!</button></dt><dd class="c-turns">0</dd></div>
+        <div><dt>Files written <button type="button" class="info" data-tip="Distinct files the kit created or edited so far, including files written by the agents it handed tasks to." aria-label="What Files written means: Distinct files the kit created or edited so far, including files written by the agents it handed tasks to.">!</button></dt><dd class="c-files">0</dd></div>
+      </dl>
+      <div class="tabs" role="tablist">
+        <button type="button" data-tab="feed" class="on">Activity</button>
+        <button type="button" data-tab="docs">Documents</button>
+        <button type="button" data-tab="result">Result</button>
+      </div>
+      <div class="pane pane-feed"><ol class="feed"></ol></div>
+      <div class="pane pane-docs" hidden>
+        <div class="doc-list"></div>
+        <pre class="doc-body"></pre>
+      </div>
+      <div class="pane pane-result" hidden></div>
+    </template>
+
+    <script src="/console.js" type="module"></script>
+  </body>
+</html>

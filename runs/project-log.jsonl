@@ -1,0 +1,36 @@
+{"phase":"phase-1","event":"start","at":"2026-11-10T06:25:10Z"}
+{"phase":"phase-1","event":"end","at":"2026-11-10T06:28:33Z","note":"lockfile packages 1487"}
+{"phase":"phase-2-backend","event":"start","at":"2026-11-10T06:30:15Z"}
+{"phase":"phase-2-frontend","event":"start","at":"2026-11-10T06:30:15Z"}
+{"phase":"phase-3","event":"start","at":"2026-11-10T06:30:15Z"}
+{"phase":"phase-3","event":"end","at":"2026-11-10T06:35:06.925Z","note":"acceptance suite 41 tests; runner 13 tests; 6 brief files"}
+{"phase":"phase-2-backend","event":"end","at":"2026-11-10T06:43:34.425Z","note":"agent report received"}
+{"phase":"phase-2-join","event":"start","at":"2026-11-10T06:43:34.458Z"}
+{"phase":"phase-2-join","event":"end","at":"2026-11-10T06:57:00.864Z","note":"tag baseline-v1; 70 unit tests; acceptance baseline 8/8, change-3 1/4, change-1 0/22, change-2 0/7"}
+{"phase":"phase-4","event":"start","at":"2026-11-10T07:08:05.215Z"}
+{"phase":"openspec-setup","event":"start","at":"2026-11-10T07:10:16.927Z"}
+{"phase":"openspec-setup","event":"end","at":"2026-11-10T07:11:11.924Z","note":"init + config.yaml + deny test; 2 headless steps"}
+{"phase":"speckit-setup","event":"start","at":"2026-11-10T07:11:11.974Z"}
+{"phase":"speckit-setup","event":"end","at":"2026-11-10T07:14:37.528Z","note":"venv + init; constitution step pending workspace trust"}
+{"phase":"phase-6-console","event":"start","at":"2026-11-10T07:20:07.273Z","note":"started early while waiting for workspace trust"}
+{"phase":"speckit-constitution","event":"start","at":"2026-11-10T07:23:20.991Z"}
+{"phase":"speckit-constitution","event":"end","at":"2026-11-10T07:24:17.355Z"}
+{"phase":"phase-4","event":"end","at":"2026-11-10T07:24:17.489Z"}
+{"phase":"phase-5","event":"start","at":"2026-11-10T07:24:17.521Z"}
+{"phase":"change-1-openspec","event":"start","at":"2026-11-10T07:24:17.556Z"}
+{"phase":"change-1-openspec","event":"end","at":"2026-11-10T07:51:30.930Z","note":"interrupted by usage limit during apply; to be resumed"}
+{"phase":"change-1-openspec","event":"start","at":"2026-11-10T07:54:23.349Z","note":"resumed after usage limit"}
+{"phase":"change-1-openspec","event":"end","at":"2026-11-10T07:58:40.169Z","note":"30/30 acceptance; 287 unit tests"}
+{"phase":"change-1-speckit","event":"start","at":"2026-11-10T07:59:19.726Z"}
+{"phase":"change-1-speckit","event":"end","at":"2026-11-10T08:40:50.582Z","note":"30/30 acceptance; 280 unit tests"}
+{"phase":"change-2-speckit","event":"start","at":"2026-11-10T08:40:50.623Z"}
+{"phase":"change-2-speckit","event":"end","at":"2026-11-10T13:04:42.710Z"}
+{"phase":"change-2-openspec","event":"start","at":"2026-11-10T13:04:42.751Z"}
+{"phase":"change-2-openspec","event":"end","at":"2026-11-10T13:22:44.202Z"}
+{"phase":"change-3-openspec","event":"start","at":"2026-11-10T13:22:59.868Z"}
+{"phase":"change-3-openspec","event":"end","at":"2026-11-10T13:27:54.446Z"}
+{"phase":"change-3-speckit","event":"start","at":"2026-11-10T13:27:54.478Z"}
+{"phase":"change-3-speckit","event":"end","at":"2026-11-10T13:41:48.968Z"}
+{"phase":"phase-5","event":"end","at":"2026-11-10T13:41:49.001Z"}
+{"phase":"phase-6-console","event":"end","at":"2026-11-10T13:49:29.352Z","note":"replay checked on scene 3; live mode built, not rehearsed"}
+{"phase":"phase-7-report","event":"end","at":"2026-11-10T13:51:43.590Z","note":"report written"}

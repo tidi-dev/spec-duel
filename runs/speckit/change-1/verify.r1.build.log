@@ -1,0 +1,88 @@
+
+ NX   Running target build for 7 projects:
+
+- backend-common
+- contract
+- booking
+- gateway
+- worker
+- room
+- web
+
+With additional flags:
+  --skip-nx-cache=true
+
+
+
+> nx run contract:build --skip-nx-cache
+
+Your library compilation option specifies that the compiler external helper (tslib) is needed but it is not installed.
+Compiling TypeScript files for project "contract"...
+Done compiling TypeScript files for project "contract".
+
+> nx run backend-common:build --skip-nx-cache
+
+Your library compilation option specifies that the compiler external helper (tslib) is needed but it is not installed.
+Compiling TypeScript files for project "backend-common"...
+Done compiling TypeScript files for project "backend-common".
+
+> nx run booking:build --skip-nx-cache
+
+chunk (runtime: main) main.js (main) 56.1 KiB [entry] [rendered]
+webpack compiled successfully (54abd88b8d048e34)
+
+> nx run gateway:build --skip-nx-cache
+
+chunk (runtime: main) main.js (main) 43.6 KiB [entry] [rendered]
+webpack compiled successfully (9da4cc316a17586f)
+
+> nx run room:build --skip-nx-cache
+
+chunk (runtime: main) main.js (main) 35.4 KiB [entry] [rendered]
+webpack compiled successfully (a48df9097e2aa8df)
+
+> nx run worker:build --skip-nx-cache
+
+chunk (runtime: main) main.js (main) 36.6 KiB [entry] [rendered]
+webpack compiled successfully (7389ae25d9909201)
+
+> nx run web:build:production --skip-nx-cache
+
+   ▲ Next.js 15.5.28
+
+   Skipping linting
+   Checking validity of types ...
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 1966ms
+   Collecting page data ...
+   Generating static pages (0/4) ...
+   Generating static pages (1/4) 
+   Generating static pages (2/4) 
+   Generating static pages (3/4) 
+ ✓ Generating static pages (4/4)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (pages)                                 Size  First Load JS    
+┌ ƒ /                                        239 B         124 kB
+├   /_app                                      0 B         124 kB
+├ ○ /404                                     180 B         124 kB
+├ ○ /bookings (596 ms)                     33.5 kB         218 kB
+└ ○ /rooms (437 ms)                        1.65 kB         186 kB
++ First Load JS shared by all               124 kB
+  ├ chunks/framework-9e074fc6354bf2b8.js   44.9 kB
+  ├ chunks/main-c3ee5c8303a30016.js        36.6 kB
+  ├ chunks/pages/_app-cfb43cdd4ecafb8b.js  41.5 kB
+  └ other shared chunks (total)              981 B
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+
+
+
+ NX   Successfully ran target build for 7 projects
+
+
+
+$ nx run-many -t build -- --skip-nx-cache

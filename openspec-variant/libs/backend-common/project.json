@@ -1,0 +1,48 @@
+{
+  "name": "backend-common",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/backend-common/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/backend-common",
+        "tsConfig": "libs/backend-common/tsconfig.lib.json",
+        "packageJson": "libs/backend-common/package.json",
+        "main": "libs/backend-common/src/index.ts",
+        "assets": []
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/backend-common/**/*.ts"],
+        "maxWarnings": 0
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/backend-common/jest.config.ts",
+        "passWithNoTests": false
+      }
+    },
+    "migration-run": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "TS_NODE_PROJECT=libs/backend-common/tsconfig.lib.json typeorm-ts-node-commonjs migration:run -d libs/backend-common/src/lib/database/data-source.ts"
+      }
+    },
+    "migration-revert": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "TS_NODE_PROJECT=libs/backend-common/tsconfig.lib.json typeorm-ts-node-commonjs migration:revert -d libs/backend-common/src/lib/database/data-source.ts"
+      }
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "root": true,
+  "ignorePatterns": ["**/*"],
+  "plugins": ["@nx"],
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+      "rules": {
+        "@nx/enforce-module-boundaries": [
+          "error",
+          {
+            "enforceBuildableLibDependency": true,
+            "allow": [],
+            "depConstraints": [{ "sourceTag": "*", "onlyDependOnLibsWithTags": ["*"] }]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["*.ts", "*.tsx"],
+      "extends": ["plugin:@nx/typescript"],
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "error",
+        "no-restricted-syntax": [
+          "error",
+          { "selector": "TSInterfaceDeclaration", "message": "Use a class or a type alias instead of an interface." }
+        ]
+      }
+    },
+    {
+      "files": ["*.js", "*.jsx"],
+      "extends": ["plugin:@nx/javascript"],
+      "rules": {}
+    }
+  ]
+}

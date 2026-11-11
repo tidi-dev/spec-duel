@@ -1,0 +1,25 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "ES2020",
+    "module": "esnext",
+    "lib": ["es2020", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "baseUrl": ".",
+    "paths": {
+      "@roombook/contract": ["libs/contract/src/index.ts"],
+      "@roombook/backend-common": ["libs/backend-common/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

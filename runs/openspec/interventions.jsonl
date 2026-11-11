@@ -1,0 +1,6 @@
+{"change":"1","step":"apply","kind":"interruption","note":"usage limit; resumed with Continue."}
+{"change":"1","step":"apply","kind":"denied-permission","note":"kit left its 4 live-stack check tasks (8.2-8.5) open: curl is not on the allowlist; it offered options, none taken, per the done rule"}
+{"change":"1","step":"archive","kind":"approval","note":"kit asked to confirm archiving with 4 open tasks and whether to sync specs; answered: confirm, sync now (its recommended option)"}
+{"change":"1","step":"archive","kind":"reprompt","note":"archive re-run after adding the Bash(openspec:*) allow rule; first attempt blocked by permissions in the resumed session"}
+{"change":"2","step":"apply","kind":"denied-permission","note":"kit left 1 task open (7.6, browser check of the page)"}
+{"change":"3","step":"apply","kind":"denied-permission","note":"kit left its live check task (2.2) open"}

@@ -1,0 +1,144 @@
+
+ NX   Running target test for 7 projects:
+
+- backend-common
+- contract
+- booking
+- gateway
+- worker
+- room
+- web
+
+With additional flags:
+  --skip-nx-cache=true
+
+
+
+> nx run contract:test --skip-nx-cache  [existing outputs match the cache, left as is]
+
+ PASS   contract  libs/contract/src/lib/dto/page-query.dto.spec.ts
+ PASS   contract  libs/contract/src/lib/contract.constants.spec.ts
+ PASS   contract  libs/contract/src/lib/dto/create-booking.dto.spec.ts (5.327 s)
+
+Test Suites: 3 passed, 3 total
+Tests:       17 passed, 17 total
+Snapshots:   0 total
+Time:        6.302 s, estimated 9 s
+Ran all test suites.
+
+> nx run backend-common:test --skip-nx-cache  [existing outputs match the cache, left as is]
+
+ PASS   backend-common  libs/backend-common/src/lib/errors/error-response.guard.spec.ts
+ PASS   backend-common  libs/backend-common/src/lib/errors/exception.helper.spec.ts (5.881 s)
+ PASS   backend-common  libs/backend-common/src/lib/nats/nats-request.util.spec.ts (6.413 s)
+ PASS   backend-common  libs/backend-common/src/lib/errors/rpc-exception.filter.spec.ts (6.556 s)
+
+Test Suites: 4 passed, 4 total
+Tests:       24 passed, 24 total
+Snapshots:   0 total
+Time:        7.445 s, estimated 16 s
+Ran all test suites.
+
+> nx run booking:test --skip-nx-cache  [existing outputs match the cache, left as is]
+
+ PASS   booking  apps/booking/src/booking/idempotent-booking.repository.spec.ts (7.108 s)
+ PASS   booking  apps/booking/src/booking/idempotent-booking.repository.overlap.spec.ts (7.081 s)
+ PASS   booking  apps/booking/src/booking/booking.service.spec.ts (7.116 s)
+ PASS   booking  apps/booking/src/booking/booking.repository.spec.ts (7.156 s)
+ PASS   booking  apps/booking/src/booking/booking.controller.spec.ts (7.44 s)
+ PASS   booking  apps/booking/src/booking/create-booking.service.overlap.spec.ts (7.44 s)
+ PASS   booking  apps/booking/src/booking/create-booking.service.spec.ts (7.417 s)
+ PASS   booking  apps/booking/src/booking/booking-overlap.error.spec.ts
+ PASS   booking  apps/booking/src/booking/booking-fingerprint.util.spec.ts
+ PASS   booking  apps/booking/src/booking/room.client.spec.ts
+ PASS   booking  apps/booking/src/booking/booking-overlap.query.spec.ts
+ PASS   booking  apps/booking/src/booking/booking.mapper.spec.ts
+ PASS   booking  apps/booking/src/booking/booking-time-range.util.spec.ts
+ PASS   booking  apps/booking/src/booking/booking.repository.update.spec.ts
+ PASS   booking  apps/booking/src/booking/confirmation-queue.producer.spec.ts
+ PASS   booking  apps/booking/src/app/app.controller.spec.ts
+
+Test Suites: 16 passed, 16 total
+Tests:       100 passed, 100 total
+Snapshots:   0 total
+Time:        8.98 s, estimated 20 s
+Ran all test suites.
+
+> nx run gateway:test --skip-nx-cache  [existing outputs match the cache, left as is]
+
+ PASS   gateway  apps/gateway/src/booking/idempotency-replay.interceptor.spec.ts
+ PASS   gateway  apps/gateway/src/booking/update-booking-fields.guard.spec.ts
+ PASS   gateway  apps/gateway/src/app/app.controller.spec.ts (6.819 s)
+ PASS   gateway  apps/gateway/src/booking/idempotency-key.guard.spec.ts (7.376 s)
+ PASS   gateway  apps/gateway/src/health/health.controller.spec.ts (7.525 s)
+ PASS   gateway  apps/gateway/src/booking/booking.controller.spec.ts (8.435 s)
+ PASS   gateway  apps/gateway/src/room/room.controller.spec.ts (8.793 s)
+
+Test Suites: 7 passed, 7 total
+Tests:       39 passed, 39 total
+Snapshots:   0 total
+Time:        9.666 s, estimated 23 s
+Ran all test suites.
+
+> nx run worker:test --skip-nx-cache  [existing outputs match the cache, left as is]
+
+ PASS   worker  apps/worker/src/confirmation/simulated-confirmation-sender.spec.ts (5.994 s)
+ PASS   worker  apps/worker/src/confirmation/confirmation.service.spec.ts (7.773 s)
+ PASS   worker  apps/worker/src/confirmation/booking.client.spec.ts (7.993 s)
+ PASS   worker  apps/worker/src/app/app.controller.spec.ts (8.025 s)
+ PASS   worker  apps/worker/src/confirmation/confirmation.processor.spec.ts (8.283 s)
+
+Test Suites: 5 passed, 5 total
+Tests:       29 passed, 29 total
+Snapshots:   0 total
+Time:        9.471 s, estimated 15 s
+Ran all test suites.
+
+> nx run web:test --skip-nx-cache  [existing outputs match the cache, left as is]
+
+ PASS   web  apps/web/src/views/bookings/bookings-table.spec.tsx
+ PASS   web  apps/web/src/views/rooms/rooms-page.spec.tsx
+ PASS   web  apps/web/src/views/bookings/booking-edit-dialog.spec.tsx
+ PASS   web  apps/web/src/views/bookings/booking-room-filter.spec.tsx
+ PASS   web  apps/web/src/views/bookings/booking-create-form.overlap.spec.tsx
+ PASS   web  apps/web/src/views/bookings/booking-delete-dialog.spec.tsx
+ PASS   web  apps/web/src/views/bookings/bookings-page.overlap.spec.tsx
+ PASS   web  apps/web/src/views/rooms/rooms-table.spec.tsx
+ PASS   web  apps/web/src/views/bookings/booking-form.schema.spec.ts
+ PASS   web  apps/web/src/layouts/app-layout.spec.tsx
+ PASS   web  apps/web/src/services/api-client.spec.ts
+ PASS   web  apps/web/src/views/bookings/use-bookings.spec.ts
+ PASS   web  apps/web/src/views/bookings/booking-date.util.spec.ts
+ PASS   web  apps/web/src/services/room.service.spec.ts
+ PASS   web  apps/web/src/services/booking.service.spec.ts
+ PASS   web  apps/web/src/views/bookings/use-idempotency-key.spec.ts
+ PASS   web  apps/web/src/views/bookings/bookings-page.spec.tsx
+ PASS   web  apps/web/src/views/bookings/booking-create-form.spec.tsx (5.226 s)
+
+Test Suites: 18 passed, 18 total
+Tests:       90 passed, 90 total
+Snapshots:   0 total
+Time:        6.113 s
+Ran all test suites.
+
+> nx run room:test --skip-nx-cache
+
+ PASS   room  apps/room/src/room/room.controller.spec.ts
+ PASS   room  apps/room/src/room/room.service.spec.ts
+ PASS   room  apps/room/src/app/app.controller.spec.ts
+ PASS   room  apps/room/src/room/room.repository.spec.ts
+
+Test Suites: 4 passed, 4 total
+Tests:       22 passed, 22 total
+Snapshots:   0 total
+Time:        2.488 s, estimated 4 s
+Ran all test suites.
+
+
+
+ NX   Successfully ran target test for 7 projects
+
+Nx read the output from the cache instead of running the command for 6 out of 7 tasks.
+
+
+$ nx run-many -t test -- --skip-nx-cache

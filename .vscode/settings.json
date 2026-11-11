@@ -1,0 +1,4 @@
+{
+  "typescript.tsdk": "openspec-variant/node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true
+}

@@ -1,0 +1,50 @@
+{
+  "kit": "speckit",
+  "change": "3",
+  "step": "analyze",
+  "phase": "check",
+  "round": 1,
+  "model": "claude-fable-5-2",
+  "resumedFrom": null,
+  "startedAt": "2026-11-10T13:34:14.409Z",
+  "endedAt": "2026-11-10T13:34:20.397Z",
+  "wallMs": 5988,
+  "exitCode": 1,
+  "status": "error",
+  "sessionId": "17dd133e-3d51-4b70-9200-48580ba669d5",
+  "turns": 2,
+  "apiMs": 2543,
+  "inputTokens": 2,
+  "outputTokens": 204,
+  "cacheReadTokens": 15009,
+  "cacheCreationTokens": 35791,
+  "costUsd": 0.5838338000000001,
+  "modelUsage": {
+    "claude-fable-5-2": {
+      "inputTokens": 2,
+      "outputTokens": 204,
+      "cacheReadInputTokens": 15009,
+      "cacheCreationInputTokens": 35791,
+      "webSearchRequests": 0,
+      "costUSD": 0.5838338000000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "cacheCreationEphemeral5mInputTokens": 0,
+      "cacheCreationEphemeral1hInputTokens": 35791,
+      "canonicalModel": "claude-fable-5-2",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permissionDenials": [
+    {
+      "tool": "Bash",
+      "input": {
+        "command": "(test -f .specify/extensions.yml && cat .specify/extensions.yml || echo \"NO_EXTENSIONS_FILE\"); echo ---; .specify/scripts/bash/check-prerequisites.sh --json --require-spec --require-tasks --include-tasks",
+        "description": "Check extension hooks and resolve feature paths"
+      }
+    }
+  ],
+  "resultText": "You've hit your 5-hour limit \u00b7 resets 12:50am (Asia/Saigon)"
+}

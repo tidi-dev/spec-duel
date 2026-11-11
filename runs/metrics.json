@@ -1,0 +1,1084 @@
+{
+  "generatedAt": "2026-11-10T16:18:55.640Z",
+  "kits": {
+    "openspec": {
+      "totals": {
+        "wallMs": 2937249,
+        "apiMs": 4196342,
+        "turns": 413,
+        "inputTokens": 450,
+        "outputTokens": 335680,
+        "cacheReadTokens": 20914015,
+        "cacheCreationTokens": 1356619,
+        "costUsd": 37.48301500000001,
+        "steps": 17
+      },
+      "changes": {
+        "1": {
+          "totals": {
+            "wallMs": 1709668,
+            "apiMs": 3153619,
+            "turns": 139,
+            "inputTokens": 234,
+            "outputTokens": 216624,
+            "cacheReadTokens": 10658615,
+            "cacheCreationTokens": 691193,
+            "costUsd": 20.021151000000003,
+            "steps": 7
+          },
+          "phases": {
+            "implement": {
+              "wallMs": 1200908,
+              "apiMs": 2642782,
+              "turns": 76,
+              "inputTokens": 176,
+              "outputTokens": 163943,
+              "cacheReadTokens": 8771733,
+              "cacheCreationTokens": 443126,
+              "costUsd": 13.566998400000003,
+              "steps": 2
+            },
+            "close": {
+              "wallMs": 98894,
+              "apiMs": 106440,
+              "turns": 40,
+              "inputTokens": 40,
+              "outputTokens": 9224,
+              "cacheReadTokens": 1105391,
+              "cacheCreationTokens": 118395,
+              "costUsd": 2.4846784,
+              "steps": 3
+            },
+            "specify": {
+              "wallMs": 409642,
+              "apiMs": 404397,
+              "turns": 23,
+              "inputTokens": 18,
+              "outputTokens": 43457,
+              "cacheReadTokens": 781491,
+              "cacheCreationTokens": 129672,
+              "costUsd": 3.9694741999999996,
+              "steps": 1
+            },
+            "check": {
+              "wallMs": 224,
+              "apiMs": 0,
+              "turns": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheCreationTokens": 0,
+              "costUsd": 0,
+              "steps": 1
+            }
+          },
+          "interventions": {
+            "interruption": 1,
+            "denied-permission": 1,
+            "approval": 1,
+            "reprompt": 1
+          },
+          "verify": {
+            "round": 1,
+            "at": "2026-11-10T07:55:03.192Z",
+            "build": {
+              "exit": 0,
+              "detail": "7 projects"
+            },
+            "lint": {
+              "exit": 0,
+              "detail": "7 projects"
+            },
+            "test": {
+              "exit": 0,
+              "detail": "287 of 287 tests"
+            }
+          },
+          "acceptance": {
+            "stackStarted": true,
+            "passed": 30,
+            "total": 30,
+            "groups": {
+              "change-1": {
+                "passed": 22,
+                "failed": 0
+              },
+              "baseline": {
+                "passed": 8,
+                "failed": 0
+              }
+            },
+            "failures": []
+          },
+          "stats": {
+            "kit": {
+              "files": 12,
+              "added": 1224,
+              "deleted": 0
+            },
+            "tests": {
+              "files": 29,
+              "added": 2254,
+              "deleted": 1
+            },
+            "code": {
+              "files": 49,
+              "added": 1458,
+              "deleted": 16
+            },
+            "total": {
+              "files": 90,
+              "added": 4936,
+              "deleted": 17
+            }
+          },
+          "rules": {
+            "filesChecked": 78,
+            "interfaceDeclarations": {
+              "count": 0,
+              "files": []
+            },
+            "anyTypes": {
+              "count": 0,
+              "files": []
+            },
+            "wildcardImports": {
+              "count": 0,
+              "files": []
+            },
+            "filesOver200Lines": {
+              "count": 0,
+              "files": []
+            },
+            "nonKebabCaseFiles": {
+              "count": 0,
+              "files": []
+            },
+            "servicesWithoutSpec": {
+              "count": 0,
+              "files": []
+            },
+            "inlineBodyTypes": {
+              "count": 0,
+              "files": []
+            },
+            "commentLines": {
+              "count": 2,
+              "files": [
+                "apps/booking/src/booking/booking.controller.ts",
+                "apps/booking/src/booking/room-lookup.client.ts"
+              ]
+            }
+          },
+          "tracks": [
+            {
+              "agent": "nestjs-expert",
+              "description": "Backend bookings implementation",
+              "launchedAt": 1794295928586,
+              "launchedAtMs": 39112,
+              "endedAtMs": 895547,
+              "wallMs": 856435,
+              "events": 370
+            },
+            {
+              "agent": "nextjs-fe-developer",
+              "description": "Frontend bookings page implementation",
+              "launchedAt": 1794295940342,
+              "launchedAtMs": 50868,
+              "endedAtMs": 494850,
+              "wallMs": 443982,
+              "events": 158
+            }
+          ]
+        },
+        "2": {
+          "totals": {
+            "wallMs": 974664,
+            "apiMs": 829211,
+            "turns": 185,
+            "inputTokens": 134,
+            "outputTokens": 97076,
+            "cacheReadTokens": 7837242,
+            "cacheCreationTokens": 394399,
+            "costUsd": 11.761944399999999,
+            "steps": 4
+          },
+          "phases": {
+            "implement": {
+              "wallMs": 566686,
+              "apiMs": 433845,
+              "turns": 116,
+              "inputTokens": 64,
+              "outputTokens": 54241,
+              "cacheReadTokens": 4325726,
+              "cacheCreationTokens": 175777,
+              "costUsd": 5.847729199999999,
+              "steps": 1
+            },
+            "close": {
+              "wallMs": 85895,
+              "apiMs": 81032,
+              "turns": 27,
+              "inputTokens": 22,
+              "outputTokens": 9973,
+              "cacheReadTokens": 766505,
+              "cacheCreationTokens": 77824,
+              "costUsd": 1.7975810000000003,
+              "steps": 1
+            },
+            "specify": {
+              "wallMs": 321903,
+              "apiMs": 314334,
+              "turns": 42,
+              "inputTokens": 48,
+              "outputTokens": 32862,
+              "cacheReadTokens": 2745011,
+              "cacheCreationTokens": 140798,
+              "costUsd": 4.1166342,
+              "steps": 1
+            },
+            "check": {
+              "wallMs": 180,
+              "apiMs": 0,
+              "turns": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheCreationTokens": 0,
+              "costUsd": 0,
+              "steps": 1
+            }
+          },
+          "interventions": {
+            "denied-permission": 1
+          },
+          "verify": {
+            "round": 1,
+            "at": "2026-11-10T13:20:01.857Z",
+            "build": {
+              "exit": 0,
+              "detail": "7 projects"
+            },
+            "lint": {
+              "exit": 0,
+              "detail": "7 projects"
+            },
+            "test": {
+              "exit": 0,
+              "detail": "305 of 305 tests"
+            }
+          },
+          "acceptance": {
+            "stackStarted": true,
+            "passed": 37,
+            "total": 37,
+            "groups": {
+              "change-1": {
+                "passed": 22,
+                "failed": 0
+              },
+              "change-2": {
+                "passed": 7,
+                "failed": 0
+              },
+              "baseline": {
+                "passed": 8,
+                "failed": 0
+              }
+            },
+            "failures": []
+          },
+          "stats": {
+            "kit": {
+              "files": 10,
+              "added": 585,
+              "deleted": 7
+            },
+            "tests": {
+              "files": 11,
+              "added": 469,
+              "deleted": 149
+            },
+            "code": {
+              "files": 9,
+              "added": 122,
+              "deleted": 9
+            },
+            "total": {
+              "files": 30,
+              "added": 1176,
+              "deleted": 165
+            }
+          },
+          "rules": {
+            "filesChecked": 20,
+            "interfaceDeclarations": {
+              "count": 0,
+              "files": []
+            },
+            "anyTypes": {
+              "count": 0,
+              "files": []
+            },
+            "wildcardImports": {
+              "count": 0,
+              "files": []
+            },
+            "filesOver200Lines": {
+              "count": 0,
+              "files": []
+            },
+            "nonKebabCaseFiles": {
+              "count": 0,
+              "files": []
+            },
+            "servicesWithoutSpec": {
+              "count": 0,
+              "files": []
+            },
+            "inlineBodyTypes": {
+              "count": 0,
+              "files": []
+            },
+            "commentLines": {
+              "count": 0,
+              "files": []
+            }
+          },
+          "tracks": null
+        },
+        "3": {
+          "totals": {
+            "wallMs": 236192,
+            "apiMs": 203651,
+            "turns": 84,
+            "inputTokens": 72,
+            "outputTokens": 21597,
+            "cacheReadTokens": 2234504,
+            "cacheCreationTokens": 189795,
+            "costUsd": 4.348076799999999,
+            "steps": 4
+          },
+          "phases": {
+            "implement": {
+              "wallMs": 80495,
+              "apiMs": 57224,
+              "turns": 34,
+              "inputTokens": 32,
+              "outputTokens": 6023,
+              "cacheReadTokens": 977300,
+              "cacheCreationTokens": 57890,
+              "costUsd": 1.362876,
+              "steps": 1
+            },
+            "close": {
+              "wallMs": 37555,
+              "apiMs": 33402,
+              "turns": 16,
+              "inputTokens": 14,
+              "outputTokens": 3811,
+              "cacheReadTokens": 367186,
+              "cacheCreationTokens": 51021,
+              "costUsd": 1.0423252,
+              "steps": 1
+            },
+            "specify": {
+              "wallMs": 117956,
+              "apiMs": 113025,
+              "turns": 34,
+              "inputTokens": 26,
+              "outputTokens": 11763,
+              "cacheReadTokens": 890018,
+              "cacheCreationTokens": 80884,
+              "costUsd": 1.9428755999999996,
+              "steps": 1
+            },
+            "check": {
+              "wallMs": 186,
+              "apiMs": 0,
+              "turns": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheCreationTokens": 0,
+              "costUsd": 0,
+              "steps": 1
+            }
+          },
+          "interventions": {
+            "denied-permission": 1
+          },
+          "verify": {
+            "round": 1,
+            "at": "2026-11-10T13:26:36.321Z",
+            "build": {
+              "exit": 0,
+              "detail": "7 projects"
+            },
+            "lint": {
+              "exit": 0,
+              "detail": "7 projects"
+            },
+            "test": {
+              "exit": 0,
+              "detail": "309 of 309 tests"
+            }
+          },
+          "acceptance": {
+            "stackStarted": true,
+            "passed": 41,
+            "total": 41,
+            "groups": {
+              "change-3": {
+                "passed": 4,
+                "failed": 0
+              },
+              "change-1": {
+                "passed": 22,
+                "failed": 0
+              },
+              "change-2": {
+                "passed": 7,
+                "failed": 0
+              },
+              "baseline": {
+                "passed": 8,
+                "failed": 0
+              }
+            },
+            "failures": []
+          },
+          "stats": {
+            "kit": {
+              "files": 6,
+              "added": 225,
+              "deleted": 0
+            },
+            "tests": {
+              "files": 1,
+              "added": 11,
+              "deleted": 0
+            },
+            "code": {
+              "files": 1,
+              "added": 2,
+              "deleted": 2
+            },
+            "total": {
+              "files": 8,
+              "added": 238,
+              "deleted": 2
+            }
+          },
+          "rules": {
+            "filesChecked": 2,
+            "interfaceDeclarations": {
+              "count": 0,
+              "files": []
+            },
+            "anyTypes": {
+              "count": 0,
+              "files": []
+            },
+            "wildcardImports": {
+              "count": 0,
+              "files": []
+            },
+            "filesOver200Lines": {
+              "count": 0,
+              "files": []
+            },
+            "nonKebabCaseFiles": {
+              "count": 0,
+              "files": []
+            },
+            "servicesWithoutSpec": {
+              "count": 0,
+              "files": []
+            },
+            "inlineBodyTypes": {
+              "count": 0,
+              "files": []
+            },
+            "commentLines": {
+              "count": 0,
+              "files": []
+            }
+          },
+          "tracks": null
+        },
+        "setup": {
+          "totals": {
+            "wallMs": 16725,
+            "apiMs": 9861,
+            "turns": 5,
+            "inputTokens": 10,
+            "outputTokens": 383,
+            "cacheReadTokens": 183654,
+            "cacheCreationTokens": 81232,
+            "costUsd": 1.3518428,
+            "steps": 2
+          },
+          "phases": {
+            "setup": {
+              "wallMs": 16725,
+              "apiMs": 9861,
+              "turns": 5,
+              "inputTokens": 10,
+              "outputTokens": 383,
+              "cacheReadTokens": 183654,
+              "cacheCreationTokens": 81232,
+              "costUsd": 1.3518428,
+              "steps": 2
+            }
+          },
+          "interventions": {},
+          "verify": null,
+          "acceptance": null,
+          "stats": null,
+          "rules": null,
+          "tracks": null
+        }
+      }
+    },
+    "speckit": {
+      "totals": {
+        "wallMs": 4417814,
+        "apiMs": 4387117,
+        "turns": 517,
+        "inputTokens": 486,
+        "outputTokens": 496396,
+        "cacheReadTokens": 22849540,
+        "cacheCreationTokens": 2135512,
+        "costUsd": 56.541178,
+        "steps": 19
+      },
+      "changes": {
+        "1": {
+          "totals": {
+            "wallMs": 2346347,
+            "apiMs": 2497621,
+            "turns": 131,
+            "inputTokens": 228,
+            "outputTokens": 288401,
+            "cacheReadTokens": 11326352,
+            "cacheCreationTokens": 964364,
+            "costUsd": 27.1763084,
+            "steps": 6
+          },
+          "phases": {
+            "check": {
+              "wallMs": 236358,
+              "apiMs": 232742,
+              "turns": 22,
+              "inputTokens": 14,
+              "outputTokens": 23035,
+              "cacheReadTokens": 492250,
+              "cacheCreationTokens": 123711,
+              "costUsd": 2.999338,
+              "steps": 1
+            },
+            "specify": {
+              "wallMs": 190651,
+              "apiMs": 183294,
+              "turns": 19,
+              "inputTokens": 24,
+              "outputTokens": 18737,
+              "cacheReadTokens": 669777,
+              "cacheCreationTokens": 131067,
+              "costUsd": 2.9806993999999998,
+              "steps": 2
+            },
+            "implement": {
+              "wallMs": 1219735,
+              "apiMs": 1389472,
+              "turns": 36,
+              "inputTokens": 152,
+              "outputTokens": 169736,
+              "cacheReadTokens": 8703561,
+              "cacheCreationTokens": 463088,
+              "costUsd": 13.8841262,
+              "steps": 1
+            },
+            "plan": {
+              "wallMs": 699603,
+              "apiMs": 692113,
+              "turns": 54,
+              "inputTokens": 38,
+              "outputTokens": 76893,
+              "cacheReadTokens": 1460764,
+              "cacheCreationTokens": 246498,
+              "costUsd": 7.312144799999999,
+              "steps": 2
+            }
+          },
+          "interventions": {
+            "note": 1,
+            "denied-permission": 1
+          },
+          "verify": {
+            "round": 1,
+            "at": "2026-11-10T08:39:18.920Z",
+            "build": {
+              "exit": 0,
+              "detail": "7 projects"
+            },
+            "lint": {
+              "exit": 0,
+              "detail": "7 projects"
+            },
+            "test": {
+              "exit": 0,
+              "detail": "280 of 280 tests"
+            }
+          },
+          "acceptance": {
+            "stackStarted": true,
+            "passed": 30,
+            "total": 30,
+            "groups": {
+              "change-1": {
+                "passed": 22,
+                "failed": 0
+              },
+              "baseline": {
+                "passed": 8,
+                "failed": 0
+              }
+            },
+            "failures": []
+          },
+          "stats": {
+            "kit": {
+              "files": 10,
+              "added": 1605,
+              "deleted": 0
+            },
+            "tests": {
+              "files": 31,
+              "added": 2649,
+              "deleted": 0
+            },
+            "code": {
+              "files": 47,
+              "added": 1534,
+              "deleted": 16
+            },
+            "total": {
+              "files": 88,
+              "added": 5788,
+              "deleted": 16
+            }
+          },
+          "rules": {
+            "filesChecked": 78,
+            "interfaceDeclarations": {
+              "count": 0,
+              "files": []
+            },
+            "anyTypes": {
+              "count": 0,
+              "files": []
+            },
+            "wildcardImports": {
+              "count": 0,
+              "files": []
+            },
+            "filesOver200Lines": {
+              "count": 0,
+              "files": []
+            },
+            "nonKebabCaseFiles": {
+              "count": 0,
+              "files": []
+            },
+            "servicesWithoutSpec": {
+              "count": 0,
+              "files": []
+            },
+            "inlineBodyTypes": {
+              "count": 0,
+              "files": []
+            },
+            "commentLines": {
+              "count": 1,
+              "files": [
+                "apps/gateway/src/booking/update-booking-fields.guard.ts"
+              ]
+            }
+          },
+          "tracks": [
+            {
+              "agent": "nestjs-expert",
+              "description": "Backend bookings tasks T002-T061",
+              "launchedAt": 1794298767116,
+              "launchedAtMs": 43480,
+              "endedAtMs": 980103,
+              "wallMs": 936623,
+              "events": 411
+            },
+            {
+              "agent": "nextjs-fe-developer",
+              "description": "Frontend bookings tasks T062-T086",
+              "launchedAt": 1794298780211,
+              "launchedAtMs": 56575,
+              "endedAtMs": 542737,
+              "wallMs": 486162,
+              "events": 156
+            }
+          ]
+        },
+        "2": {
+          "totals": {
+            "wallMs": 1422376,
+            "apiMs": 1287516,
+            "turns": 228,
+            "inputTokens": 134,
+            "outputTokens": 143536,
+            "cacheReadTokens": 7203321,
+            "cacheCreationTokens": 695366,
+            "costUsd": 18.3090322,
+            "steps": 6
+          },
+          "phases": {
+            "check": {
+              "wallMs": 180203,
+              "apiMs": 176790,
+              "turns": 24,
+              "inputTokens": 14,
+              "outputTokens": 18048,
+              "cacheReadTokens": 461281,
+              "cacheCreationTokens": 107163,
+              "costUsd": 2.5288961999999997,
+              "steps": 1
+            },
+            "specify": {
+              "wallMs": 137551,
+              "apiMs": 130322,
+              "turns": 17,
+              "inputTokens": 20,
+              "outputTokens": 13653,
+              "cacheReadTokens": 499732,
+              "cacheCreationTokens": 114778,
+              "costUsd": 2.4826744,
+              "steps": 2
+            },
+            "implement": {
+              "wallMs": 543372,
+              "apiMs": 426529,
+              "turns": 111,
+              "inputTokens": 58,
+              "outputTokens": 52124,
+              "cacheReadTokens": 4494067,
+              "cacheCreationTokens": 217695,
+              "costUsd": 6.467357399999999,
+              "steps": 1
+            },
+            "plan": {
+              "wallMs": 561250,
+              "apiMs": 553875,
+              "turns": 76,
+              "inputTokens": 42,
+              "outputTokens": 59711,
+              "cacheReadTokens": 1748241,
+              "cacheCreationTokens": 255730,
+              "costUsd": 6.830104200000001,
+              "steps": 2
+            }
+          },
+          "interventions": {
+            "interruption": 1,
+            "denied-permission": 1
+          },
+          "verify": {
+            "round": 1,
+            "at": "2026-11-10T13:03:27.645Z",
+            "build": {
+              "exit": 0,
+              "detail": "7 projects"
+            },
+            "lint": {
+              "exit": 0,
+              "detail": "7 projects"
+            },
+            "test": {
+              "exit": 0,
+              "detail": "310 of 310 tests"
+            }
+          },
+          "acceptance": {
+            "stackStarted": true,
+            "passed": 37,
+            "total": 37,
+            "groups": {
+              "change-2": {
+                "passed": 7,
+                "failed": 0
+              },
+              "change-1": {
+                "passed": 22,
+                "failed": 0
+              },
+              "baseline": {
+                "passed": 8,
+                "failed": 0
+              }
+            },
+            "failures": []
+          },
+          "stats": {
+            "kit": {
+              "files": 9,
+              "added": 1265,
+              "deleted": 0
+            },
+            "tests": {
+              "files": 11,
+              "added": 771,
+              "deleted": 74
+            },
+            "code": {
+              "files": 9,
+              "added": 139,
+              "deleted": 21
+            },
+            "total": {
+              "files": 29,
+              "added": 2175,
+              "deleted": 95
+            }
+          },
+          "rules": {
+            "filesChecked": 20,
+            "interfaceDeclarations": {
+              "count": 0,
+              "files": []
+            },
+            "anyTypes": {
+              "count": 0,
+              "files": []
+            },
+            "wildcardImports": {
+              "count": 0,
+              "files": []
+            },
+            "filesOver200Lines": {
+              "count": 0,
+              "files": []
+            },
+            "nonKebabCaseFiles": {
+              "count": 0,
+              "files": []
+            },
+            "servicesWithoutSpec": {
+              "count": 0,
+              "files": []
+            },
+            "inlineBodyTypes": {
+              "count": 0,
+              "files": []
+            },
+            "commentLines": {
+              "count": 0,
+              "files": []
+            }
+          },
+          "tracks": null
+        },
+        "3": {
+          "totals": {
+            "wallMs": 602786,
+            "apiMs": 559270,
+            "turns": 146,
+            "inputTokens": 112,
+            "outputTokens": 59759,
+            "cacheReadTokens": 4036994,
+            "cacheCreationTokens": 428019,
+            "costUsd": 10.046958800000002,
+            "steps": 6
+          },
+          "phases": {
+            "check": {
+              "wallMs": 82645,
+              "apiMs": 79476,
+              "turns": 17,
+              "inputTokens": 12,
+              "outputTokens": 8260,
+              "cacheReadTokens": 352655,
+              "cacheCreationTokens": 31721,
+              "costUsd": 0.9085629999999999,
+              "steps": 1
+            },
+            "specify": {
+              "wallMs": 88683,
+              "apiMs": 80944,
+              "turns": 15,
+              "inputTokens": 20,
+              "outputTokens": 8269,
+              "cacheReadTokens": 501349,
+              "cacheCreationTokens": 101486,
+              "costUsd": 2.0549657999999997,
+              "steps": 2
+            },
+            "implement": {
+              "wallMs": 148416,
+              "apiMs": 123031,
+              "turns": 66,
+              "inputTokens": 44,
+              "outputTokens": 13099,
+              "cacheReadTokens": 2005619,
+              "cacheCreationTokens": 112768,
+              "costUsd": 2.7297238,
+              "steps": 1
+            },
+            "plan": {
+              "wallMs": 283042,
+              "apiMs": 275819,
+              "turns": 48,
+              "inputTokens": 36,
+              "outputTokens": 30131,
+              "cacheReadTokens": 1177371,
+              "cacheCreationTokens": 182044,
+              "costUsd": 4.3537062,
+              "steps": 2
+            }
+          },
+          "interventions": {
+            "interruption": 1,
+            "denied-permission": 1
+          },
+          "verify": {
+            "round": 1,
+            "at": "2026-11-10T13:41:08.364Z",
+            "build": {
+              "exit": 0,
+              "detail": "7 projects"
+            },
+            "lint": {
+              "exit": 0,
+              "detail": "7 projects"
+            },
+            "test": {
+              "exit": 0,
+              "detail": "321 of 321 tests"
+            }
+          },
+          "acceptance": {
+            "stackStarted": true,
+            "passed": 41,
+            "total": 41,
+            "groups": {
+              "change-1": {
+                "passed": 22,
+                "failed": 0
+              },
+              "change-2": {
+                "passed": 7,
+                "failed": 0
+              },
+              "change-3": {
+                "passed": 4,
+                "failed": 0
+              },
+              "baseline": {
+                "passed": 8,
+                "failed": 0
+              }
+            },
+            "failures": []
+          },
+          "stats": {
+            "kit": {
+              "files": 9,
+              "added": 900,
+              "deleted": 0
+            },
+            "tests": {
+              "files": 1,
+              "added": 47,
+              "deleted": 0
+            },
+            "code": {
+              "files": 1,
+              "added": 2,
+              "deleted": 2
+            },
+            "total": {
+              "files": 11,
+              "added": 949,
+              "deleted": 2
+            }
+          },
+          "rules": {
+            "filesChecked": 2,
+            "interfaceDeclarations": {
+              "count": 0,
+              "files": []
+            },
+            "anyTypes": {
+              "count": 0,
+              "files": []
+            },
+            "wildcardImports": {
+              "count": 0,
+              "files": []
+            },
+            "filesOver200Lines": {
+              "count": 0,
+              "files": []
+            },
+            "nonKebabCaseFiles": {
+              "count": 0,
+              "files": []
+            },
+            "servicesWithoutSpec": {
+              "count": 0,
+              "files": []
+            },
+            "inlineBodyTypes": {
+              "count": 0,
+              "files": []
+            },
+            "commentLines": {
+              "count": 0,
+              "files": []
+            }
+          },
+          "tracks": null
+        },
+        "setup": {
+          "totals": {
+            "wallMs": 46305,
+            "apiMs": 42710,
+            "turns": 12,
+            "inputTokens": 12,
+            "outputTokens": 4700,
+            "cacheReadTokens": 282873,
+            "cacheCreationTokens": 47763,
+            "costUsd": 1.0088786,
+            "steps": 1
+          },
+          "phases": {
+            "setup": {
+              "wallMs": 46305,
+              "apiMs": 42710,
+              "turns": 12,
+              "inputTokens": 12,
+              "outputTokens": 4700,
+              "cacheReadTokens": 282873,
+              "cacheCreationTokens": 47763,
+              "costUsd": 1.0088786,
+              "steps": 1
+            }
+          },
+          "interventions": {},
+          "verify": null,
+          "acceptance": null,
+          "stats": null,
+          "rules": null,
+          "tracks": null
+        }
+      }
+    }
+  }
+}

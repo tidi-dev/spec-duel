@@ -1,0 +1,23 @@
+{
+  "openspec": {
+    "init": "setup",
+    "deny-test": "setup",
+    "propose": "specify",
+    "revise": "specify",
+    "validate": "check",
+    "apply": "implement",
+    "archive": "close",
+    "deny-test-control": "setup"
+  },
+  "speckit": {
+    "init": "setup",
+    "constitution": "setup",
+    "specify": "specify",
+    "clarify": "specify",
+    "revise": "specify",
+    "plan": "plan",
+    "tasks": "plan",
+    "analyze": "check",
+    "implement": "implement"
+  }
+}

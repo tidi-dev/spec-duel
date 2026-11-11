@@ -1,0 +1,16 @@
+{
+  "round": 1,
+  "at": "2026-11-10T08:39:18.920Z",
+  "build": {
+    "exit": 0,
+    "detail": "7 projects"
+  },
+  "lint": {
+    "exit": 0,
+    "detail": "7 projects"
+  },
+  "test": {
+    "exit": 0,
+    "detail": "280 of 280 tests"
+  }
+}

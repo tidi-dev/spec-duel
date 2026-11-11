@@ -1,0 +1,10 @@
+#!/usr/bin/env node
+const { readFileSync, writeFileSync } = require('node:fs');
+
+if (process.env.FAKE_CLAUDE_ARGS_OUT) {
+  writeFileSync(process.env.FAKE_CLAUDE_ARGS_OUT, JSON.stringify({ argv: process.argv.slice(2), cwd: process.cwd(), path: process.env.PATH }));
+}
+if (process.env.FAKE_CLAUDE_FIXTURE) {
+  process.stdout.write(readFileSync(process.env.FAKE_CLAUDE_FIXTURE, 'utf8'));
+}
+process.exit(Number(process.env.FAKE_CLAUDE_EXIT || 0));
