@@ -1,15 +1,138 @@
+### macOS
+# Finder metadata
+.DS_Store
+
+# Thumbnails
+._*
+
+# Custom folder icons
+Icon
+
+# Volume root files
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+### VS Code
+# VSCode settings (keep shared configuration)
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
+
+### Node
+# Dependencies
 node_modules/
-dist/
-tmp/
-.nx/
-.next/
+
+# Logs
+*.log
+
+# Runtime data
+*.pid
+*.pid.lock
+
+# Coverage
 coverage/
-.demo/
-.playwright-mcp/
-next-env.d.ts
+*.lcov
+.nyc_output
+
+# Build output
+dist/
+build/Release
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Framework build output and caches
+.cache
+.parcel-cache
+.next
+out/
+.nuxt
+
+# dotenv environment variable files
 .env
+.env.local
+.env.*.local
+
+# npm cache directory
+.npm
+*.tgz
+
+# yarn v2
+.yarn/cache
+.yarn/unplugged
+.yarn/install-state.gz
+.pnp.*
+
+### Python
+# Byte-compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+*.egg
+
+# dotenv environment variable files
+.env
+
+# Virtual environments
+.venv
+env/
+venv/
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.pytest_cache/
+
+# Type checkers
+.mypy_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+# .python-version
+
+### Project
+# Nx and app caches, scratch output
+.nx/
+tmp/
+next-env.d.ts
+
+# Environment files: only .env.example may be committed
 .env.*
 !.env.example
-.DS_Store
+
+# Demo runtime logs and browser automation output
+.demo/
+.playwright-mcp/
+
+# Local agent settings and kit state
 .claude/settings.local.json
 speckit-variant/.specify/feature.json
+
+# Run logs are evidence for the report and console
+!runs/**/*.log
