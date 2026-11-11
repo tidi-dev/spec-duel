@@ -34,3 +34,11 @@
 {"phase":"phase-5","event":"end","at":"2026-11-10T13:41:49.001Z"}
 {"phase":"phase-6-console","event":"end","at":"2026-11-10T13:49:29.352Z","note":"replay checked on scene 3; live mode built, not rehearsed"}
 {"phase":"phase-7-report","event":"end","at":"2026-11-10T13:51:43.590Z","note":"report written"}
+{"phase":"kit-install-cyberrock","event":"start","at":"2026-11-11T06:52:14.045Z"}
+{"phase":"kit-install-cyberrock","event":"end","at":"2026-11-11T06:56:42.435Z"}
+{"phase":"change-1-cyberrock","event":"start","at":"2026-11-11T06:57:00.559Z"}
+{"phase":"change-1-cyberrock","event":"end","at":"2026-11-11T07:35:01.291Z"}
+{"phase":"change-2-cyberrock","event":"start","at":"2026-11-11T07:35:01.326Z"}
+{"phase":"change-2-cyberrock","event":"end","at":"2026-11-11T08:29:59.725Z"}
+{"phase":"change-3-cyberrock","event":"start","at":"2026-11-11T08:29:59.760Z"}
+{"phase":"change-3-cyberrock","event":"end","at":"2026-11-11T08:32:24.997Z"}

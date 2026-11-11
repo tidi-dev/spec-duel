@@ -4,7 +4,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SUMMED = ['wallMs', 'apiMs', 'turns', 'inputTokens', 'outputTokens', 'cacheReadTokens', 'cacheCreationTokens', 'costUsd'];
-const KITS = ['openspec', 'speckit'];
+const KITS = Object.keys(JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), 'phases.json'), 'utf8')));
 
 const emptyTotals = () => ({ ...Object.fromEntries(SUMMED.map((key) => [key, 0])), steps: 0 });
 

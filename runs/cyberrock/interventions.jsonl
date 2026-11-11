@@ -1,0 +1,2 @@
+{"change":"1","step":"apply","kind":"interruption","note":"headless session ended its turn while the backend agent was still running; Claude Code killed the agent 10 minutes after the last main-session turn (frontend agent done at 9:12, backend agent killed at 19:19 while starting the stack for its integration specs); resumed once with Continue."}
+{"change":"2","step":"apply","kind":"interruption","note":"account usage limit reached 61 s into the step, 0 turns completed, both coding agents killed within 20 s; resumed once with Continue."}

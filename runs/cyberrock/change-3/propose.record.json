@@ -1,0 +1,42 @@
+{
+  "kit": "cyberrock",
+  "change": "3",
+  "step": "propose",
+  "phase": "specify",
+  "round": 1,
+  "model": "claude-fable-5-2",
+  "resumedFrom": null,
+  "startedAt": "2026-11-11T08:30:06.528Z",
+  "endedAt": "2026-11-11T08:31:24.001Z",
+  "wallMs": 77473,
+  "exitCode": 0,
+  "status": "ok",
+  "sessionId": "839cd8f6-fde1-4686-8430-94d4a23ad162",
+  "turns": 26,
+  "apiMs": 59148,
+  "inputTokens": 20,
+  "outputTokens": 5340,
+  "cacheReadTokens": 595621,
+  "cacheCreationTokens": 64623,
+  "costUsd": 1.3668521999999999,
+  "modelUsage": {
+    "claude-fable-5-2": {
+      "inputTokens": 20,
+      "outputTokens": 5340,
+      "cacheReadInputTokens": 595621,
+      "cacheCreationInputTokens": 64623,
+      "webSearchRequests": 0,
+      "costUSD": 1.3668521999999999,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 228,
+      "cacheCreationEphemeral5mInputTokens": 0,
+      "cacheCreationEphemeral1hInputTokens": 64623,
+      "canonicalModel": "claude-fable-5-2",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permissionDenials": [],
+  "resultText": "The rooms paging bug is fixed and archived as `fix-rooms-page-offset`; build, lint and test all pass. I did not call the live `GET /api/rooms?page=2&limit=5` (`curl` is not allowed here), so the done-when is proven by the repository spec, not by a real request.\n\n- **Cause:** `apps/room/src/room/room.repository.ts:19` computed the offset as `(page - 1) * DEFAULT_PAGE_SIZE` while taking `query.limit` rows. Page 2 at 5 per page skipped 10 rows instead of 5. Page 1 (skip 0) and the default size of 10 hide it.\n- **Why the tests missed it:** `room.repository.spec.ts` only used `limit: 10`, where both formulas agree. The gateway spec used `limit=5` only with `page=1`. `rooms-page.spec.tsx` mocks `listRooms` with a fake that slices correctly, and no integration spec reads rooms from the real database.\n- **Fix:** the offset is now `(query.page - 1) * query.limit`, and the unused import is removed.\n- **Regression test:** `room.repository.spec.ts` now pages over 12 named rooms through a fake that slices by `skip`/`take`. It covers 5 per page for pages 1 to 4, 10 per page page 2, 1 per page page 12, and 100 per page page 1. Before the fix, three cases failed, including page 2 of 5 returning `Room 11`, `Room 12`; after it, all 11 tests in the file pass.\n- **Spec:** no rooms spec existed, so the correct behaviour was added as ROOM-001 and merged into `cr/specs` on archive.\n- **Siblings:** none with the same defect. `booking.repository.ts:53` already uses `query.limit`, and the web callers pass the page and limit through unchanged.\n- **Not changed:** the room repository has no guard for an offset too large for Postgres, which the booking repository has. That is a different defect, so I left it.\n\nNothing is committed."
+}

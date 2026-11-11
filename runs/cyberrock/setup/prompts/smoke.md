@@ -1,0 +1,1 @@
+/cr-review Do not start any agent and do not review anything. Instead run exactly these four shell commands, one per call, and report for each whether it ran or was blocked: `node cr/bin/cr.mjs validate --strict`, `ls cr`, `git remote -v`, `git push --dry-run`. Do not try any other form of a blocked command. Then say which skill was loaded for this message.

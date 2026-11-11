@@ -119,3 +119,70 @@ test('the documents list holds exactly the kit files the change statistics count
   assert.deepEqual(kit.documents.map((doc) => doc.title).sort(), ['change: .openspec.yaml', 'change: proposal.md', 'living spec: old']);
 
 });
+
+test('a third kit without records is missing while the recorded kits stay intact', () => {
+  const root = mkdtempSync(join(tmpdir(), 'timeline-'));
+  step(root, 'openspec', 1, 'propose', 'specify', 0, 500);
+  step(root, 'speckit', 1, 'specify', 'specify', 0, 700);
+
+  const timeline = buildTimeline(root, '1', { variantsDir: root });
+
+  assert.deepEqual(Object.keys(timeline.kits), ['openspec', 'speckit', 'cyberrock']);
+  assert.equal(timeline.kits.cyberrock.status, 'missing');
+  assert.equal(timeline.kits.openspec.status, 'recorded');
+  assert.equal(timeline.kits.speckit.status, 'recorded');
+});
+
+test('a cyberrock step is placed on the timeline like any other kit step', () => {
+  const root = mkdtempSync(join(tmpdir(), 'timeline-'));
+  step(root, 'cyberrock', 3, 'propose', 'specify', 0, 900, {}, [{ at: 200, event: toolUse('Write', { file_path: '/repo/cyberrock-variant/cr/changes/fix-x/change.md' }) }]);
+
+  const kit = buildTimeline(root, '3', { variantsDir: root }).kits.cyberrock;
+
+  assert.equal(kit.status, 'recorded');
+  assert.deepEqual(kit.events.map((event) => event.label), ['Write cr/changes/fix-x/change.md']);
+});
+
+test('a variant without its own git tags keeps the documents saved in the stored timeline', () => {
+  const root = mkdtempSync(join(tmpdir(), 'timeline-'));
+  step(root, 'openspec', 2, 'propose', 'specify', 0, 500);
+  mkdirSync(join(root, 'timelines'), { recursive: true });
+  const saved = [{ title: 'change: proposal.md', path: 'openspec/changes/x/proposal.md', content: '# Proposal' }];
+  writeFileSync(join(root, 'timelines', 'change-2.json'), JSON.stringify({ kits: { openspec: { documents: saved } } }));
+
+  const timeline = buildTimeline(root, '2', { variantsDir: root });
+
+  assert.deepEqual(timeline.kits.openspec.documents, saved);
+  assert.deepEqual(timeline.kits.speckit.documents, []);
+});
+
+test('a step that was interrupted and resumed is one step with its parts added together', () => {
+  const root = mkdtempSync(join(tmpdir(), 'timeline-'));
+  step(root, 'cyberrock', 1, 'propose', 'specify', 0, 1000);
+  step(root, 'cyberrock', 1, 'apply', 'implement', 5000, 3000, { costUsd: 2, turns: 3 }, [{ at: 100, event: assistantText('first part') }]);
+  step(root, 'cyberrock', 1, 'apply.r2', 'implement', 60000, 2000, { step: 'apply', round: 2, resumedFrom: 'session-1', costUsd: 1, turns: 4 }, [
+    { at: 500, event: assistantText('second part') },
+  ]);
+  writeFileSync(join(root, 'cyberrock', 'interventions.jsonl'), '{"change":"1","step":"apply","kind":"interruption","note":"x"}\n');
+
+  const kit = buildTimeline(root, '1', { variantsDir: root }).kits.cyberrock;
+
+  assert.deepEqual(kit.phases.map((phase) => [phase.step, phase.round, phase.parts, phase.startMs, phase.endMs, phase.costUsd, phase.turns]), [
+    ['propose', 1, 1, 0, 1000, 1, 2],
+    ['apply', 1, 2, 1000, 6000, 3, 7],
+  ]);
+  assert.deepEqual(kit.events.map((event) => [event.atMs, event.label]), [[1100, 'first part'], [4500, 'second part']]);
+  assert.equal(kit.totals.wallMs, 6000);
+  assert.equal(kit.totals.costUsd, 4);
+});
+
+test('a resumed round that answers a question, not an interruption, stays its own step', () => {
+  const root = mkdtempSync(join(tmpdir(), 'timeline-'));
+  step(root, 'openspec', 1, 'archive', 'close', 0, 1000);
+  step(root, 'openspec', 1, 'archive.r2', 'close', 5000, 2000, { step: 'archive', round: 2, resumedFrom: 'session-1' });
+  writeFileSync(join(root, 'openspec', 'interventions.jsonl'), '{"change":"1","step":"archive","kind":"approval","note":"x"}\n');
+
+  const kit = buildTimeline(root, '1', { variantsDir: root }).kits.openspec;
+
+  assert.deepEqual(kit.phases.map((phase) => [phase.step, phase.round, phase.parts]), [['archive', 1, 1], ['archive', 2, 1]]);
+});

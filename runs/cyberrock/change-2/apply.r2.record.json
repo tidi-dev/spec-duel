@@ -1,0 +1,57 @@
+{
+  "kit": "cyberrock",
+  "change": "2",
+  "step": "apply",
+  "phase": "implement",
+  "round": 2,
+  "model": "claude-fable-5-2",
+  "resumedFrom": "f992bc50-99b5-4028-a7a9-5681ff29ea60",
+  "startedAt": "2026-11-11T08:13:21.965Z",
+  "endedAt": "2026-11-11T08:26:04.958Z",
+  "wallMs": 762993,
+  "exitCode": 0,
+  "status": "ok",
+  "sessionId": "f992bc50-99b5-4028-a7a9-5681ff29ea60",
+  "turns": 33,
+  "apiMs": 738178,
+  "inputTokens": 114,
+  "outputTokens": 69244,
+  "cacheReadTokens": 4250010,
+  "cacheCreationTokens": 329528,
+  "costUsd": 7.25706,
+  "modelUsage": {
+    "claude-fable-5-2": {
+      "inputTokens": 136,
+      "outputTokens": 76534,
+      "thinkingTokens": 19196,
+      "cacheReadInputTokens": 4619067,
+      "cacheCreationInputTokens": 444564,
+      "cacheCreationEphemeral5mInputTokens": 340451,
+      "cacheCreationEphemeral1hInputTokens": 104113,
+      "webSearchRequests": 0,
+      "costUSD": 9.0565794,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "canonicalModel": "claude-fable-5-2",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permissionDenials": [
+    {
+      "tool": "Bash",
+      "input": {
+        "command": "git -C /Users/tidi/sunbytes/openspec-demo/cyberrock-variant diff",
+        "description": "Show uncommitted diff"
+      }
+    }
+  ],
+  "resultText": "The change `prevent-overlapping-room-bookings` is implemented, verified and archived: create and update now answer 409 `CONFLICT.BOOKING_OVERLAP` for an overlapping span in the same room, also under concurrency.\n\n- **Tasks:** T01–T12 are all ticked, none open. `BookingService`, the create form and the edit dialog needed no code change; their new specs passed against the existing code.\n- **Verification:** `pnpm run build`, `pnpm run lint` and `pnpm run test` pass for all 7 projects (422 tests, booking 184). The integration specs pass against the real database: backend-common 12, booking 26.\n- **Review, fixed:** the concurrency specs did not prove the room lock. I added a real-database case where a create must wait for a held room lock; it fails with the lock removed and passes with it.\n- **Review, rejected:** the migration fails on a database that already holds overlapping bookings. It fails closed, and what to do with such rows is a requirements decision the change does not make, so this is open for you.\n- **Beyond the task list:** I split two spec files that exceeded 200 lines into `booking.repository.update.overlap.spec.ts` and `booking-overlap.concurrency.int.spec.ts`; no case was removed.\n- **Local stack:** `scripts/stack-up.sh` was run twice to apply the new migration, so the app processes are doubled. Run `scripts/stack-down.sh` then `scripts/stack-up.sh` before any check through the gateway.\n- **Interruption:** both coding agents stopped once on the usage limit before writing anything and were resumed.\n- **Assumptions:**\n  - The migration role may create `btree_gist`.\n  - The integration specs use random room ids, since `bookings.room_id` has no foreign key.\n  - \"Next submit\" in the create-form spec means resubmitting the unchanged form.\n- **Archive:** 8 requirements merged into 3 specs. Nothing is committed.",
+  "cumulative": {
+    "costUsd": 9.0565794,
+    "inputTokens": 136,
+    "outputTokens": 76534,
+    "cacheReadTokens": 4619067,
+    "cacheCreationTokens": 444564
+  }
+}

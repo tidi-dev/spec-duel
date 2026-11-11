@@ -1,0 +1,20 @@
+{
+  "stackStarted": true,
+  "passed": 37,
+  "total": 37,
+  "groups": {
+    "change-1": {
+      "passed": 22,
+      "failed": 0
+    },
+    "change-2": {
+      "passed": 7,
+      "failed": 0
+    },
+    "baseline": {
+      "passed": 8,
+      "failed": 0
+    }
+  },
+  "failures": []
+}

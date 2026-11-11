@@ -1,0 +1,24 @@
+{
+  "stackStarted": true,
+  "passed": 34,
+  "total": 37,
+  "groups": {
+    "change-1": {
+      "passed": 22,
+      "failed": 0
+    },
+    "change-2": {
+      "passed": 4,
+      "failed": 3
+    },
+    "baseline": {
+      "passed": 8,
+      "failed": 0
+    }
+  },
+  "failures": [
+    "change-2: no overlapping bookings in one room rejects a booking that sits inside an existing one",
+    "change-2: no overlapping bookings in one room rejects an update that moves a booking onto another one",
+    "change-2: no overlapping bookings in one room lets exactly one of two overlapping creates through when they arrive at once"
+  ]
+}
