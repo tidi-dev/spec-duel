@@ -1,0 +1,333 @@
+# Build the `cyberrock-variant` kit (best of OpenSpec + Spec Kit), run it on the same three changes, and compare all three kits in the console
+
+## Context
+
+- Work context (git root): `/Users/tidi/sunbytes/openspec-demo`. Reports: `/Users/tidi/sunbytes/openspec-demo/plans/reports/`. Plans: `/Users/tidi/sunbytes/openspec-demo/plans/`. Older documents in this repo still say `/workspace/spec-duel`. That is the same folder under its old path.
+- The demo already compared two spec-driven kits on `roombook`, a synthetic CyberRock-shaped Nx monorepo (gateway, room, booking, worker, web; NestJS 11, Next.js 15 Pages Router, TypeORM 0.3, BullMQ 5, NATS, Postgres 15, Redis 7):
+  - `openspec-variant/`: OpenSpec 1.16.1.
+  - `speckit-variant/`: Spec Kit 1.3.3.
+  - Each is `baseline/` plus one kit plus the code that kit wrote for three changes: feature, brownfield change, bugfix.
+- Source reports. Read all of them in full before designing anything:
+  1. `reports/openspec-vs-spec-kit-code-audit.md` is the **primary source**. Pay most attention to §4 (findings by criterion), §5 (strengths and weaknesses), §6 (Potential bugs B1–B12) and §8 (recommendation).
+  2. `reports/openspec-vs-spec-kit-comparison.md` covers process, time, tokens, cost, turns, per-phase cost, interventions and security observations.
+  3. `plans/reports/openspec-variant-code-audit.md` and `plans/reports/speckit-variant-code-audit.md` are the raw per-kit audits behind report 1.
+- Raw evidence for the AI-interaction analysis:
+  - Recordings and per-change scoring: `runs/<kit>/change-<n>/*.record.json`, `*.events.jsonl`, `prompts/`, `verify.json`, `acceptance*.json`, `stats.json`, `rules.json`, `tracks.json`.
+  - Run-wide data: `runs/metrics.json`, `runs/notes.md`, `runs/install-summary.md`, `runs/<kit>/interventions.jsonl`.
+- Existing machinery to reuse, not rewrite:
+  - Run and score: `runs/tools/run-step.mjs`, `parse-events.mjs`, `make-prompts.mjs`, `rollup.mjs`, `build-timeline.mjs`, `change-stats.mjs`, `check-rules.mjs`, `verify-change.mjs`, `score-change.mjs`, `track-times.mjs`, `report-tables.py`, `phases.json`, `process-note.md`, plus their tests in `runs/tools/test/`.
+  - Procedure and design: the run protocol in `plans/261110-1210-openspec-vs-spec-kit-demo/implementation-phase-5.md`, the briefs in `plans/261110-1210-openspec-vs-spec-kit-demo/briefs/`, and `design.md` and `research.md` in the same folder.
+  - Console and launcher: `console/` (server, public files, tests), `demo.sh`, `CONSOLE.md`.
+- Rules that apply:
+  - Shared rules in `/Users/tidi/sunbytes/.claude/rules/`: `be-development-rules.md`, `fe-development-rules.md`, `RULES.md` R1–R11, `primary-workflow.md`, `orchestration-protocol.md`.
+  - Project rules in `.claude/CLAUDE.md` and `.claude/rules/security.md`.
+
+## Objective
+
+Create **`cyberrock-variant`**, a third spec-driven kit meant to become the CyberRock team standard. It combines the proven strengths of OpenSpec and Spec Kit and is built to avoid their measured weaknesses and the bug classes the code audit found. Then run it through the same three changes under the same protocol, audit its code with the same rubric, and extend the console and docs to compare all three kits.
+
+**Learning from the other two kits' mistakes is the purpose of this kit, not a side effect.** Every weakness and bug the reports found must end up as a concrete rule in the kit's skills and, above all, in the **agents that write the code**, so the same mistakes are not made again in future CyberRock work.
+
+This is an experiment, not a showcase. The question is: **can a purpose-built kit beat both on cost, time and output tokens while staying at least as correct (41/41 hidden tests) and producing fewer code-audit findings, and can it be applied to the real CyberRock repo?** Report the measured answer honestly, including if it loses.
+
+### Baseline figures to beat (three changes, from the reports)
+
+| | OpenSpec | Spec Kit |
+|---|---|---|
+| Real time | 48 min 41 s | 1 h 12 min 52 s |
+| Cost | $36.13 | $55.53 |
+| Output tokens | 335,297 | 491,696 |
+| Turns (main session) | 408 | 505 |
+| Kit document lines | 2,034 | 3,770 |
+| Hidden acceptance | 30/30, 37/37, 41/41 | 30/30, 37/37, 41/41 |
+| Code-audit findings (crit/high/med/low) | 0/0/5/6 | 0/1/8/5 |
+| Bugfix alone | 3:56, $4.35, 225 doc lines | 10:03, $10.05, 900 doc lines |
+
+## Phase 0: Analysis (read-only), saved as `research.md` in a new plan folder
+
+Create a new plan folder under `plans/`, named with the repo's pattern (`YYMMDD-HHMM-<slug>`, e.g. `plans/261111-HHMM-cyberrock-variant-kit/`). Use the `research` skill. Every claim cites a file and line, or a command and its output. Facts are kept separate from judgement.
+
+### A. Strengths to keep
+At minimum, verify and cite each of these.
+
+From OpenSpec:
+- Living specs updated in place by delta specs (ADDED / MODIFIED / REMOVED), so the specs describe current behaviour.
+- One planning step instead of four.
+- A free, instant, AI-free `validate --strict` gate that can run in CI.
+- SHALL plus WHEN/THEN scenarios with concrete values.
+- Lean code: −18% lines, one home for each rule, the ORM transaction API, deterministic UTC time handling, the client keeps the idempotency key across a retry, the pager recovers after a delete.
+
+From Spec Kit:
+- Numbered requirement IDs (FR-001…) and success criteria that trace mechanically.
+- Native `[P]` parallel task markers.
+- `analyze` cross-checks the plan against the code and found real inconsistencies.
+- A constitution-level rule set.
+- Runs fully unattended: no questions, confirmations or re-runs.
+- No pre-approved tools, no telemetry.
+- Code: merges a partial update inside the lock (`COALESCE`), enqueue with a timeout, one shared form validation schema, thorough regression tests.
+
+### B. Weaknesses to avoid
+At minimum, verify and cite each of these.
+
+From OpenSpec:
+- No requirement IDs and no parallel markers.
+- The archive step asks for confirmation, which cost 3 attempts, $2.48 and about 40 turns on the feature.
+- Broad `Bash(openspec:*)` pre-approval and telemetry on by default.
+
+From Spec Kit:
+- Four planning steps.
+- An AI-only check costing $0.91–3.00 per run.
+- Dated specs that go stale: spec 001 still says overlaps are allowed.
+- Heavy documents (3,770 lines) and 91 tasks for the feature.
+- Its full flow applied to a 2-line bugfix: 95% of the added lines were documents.
+- The same rule stated in several places.
+- Rules split across layers between create and update (F9).
+- Raw SQL with a hand-kept column list (F8).
+- Duplicated `queryRunner` boilerplate (F10).
+
+From both:
+- No real-database concurrency test.
+- No database-level overlap constraint.
+- A spec that locks a bug in (OpenSpec `confirmation-queue.producer.spec.ts:36`).
+- Form fields duplicated between the create and edit forms.
+- Line coverage that overstates what was verified; branch coverage is the better guide.
+
+### C. Bug-class catalogue
+Turn every bug in code audit §6 (B1–B12) and the per-kit audit findings into a **generic, stack-level bug class** with:
+- a detection question;
+- a required test shape;
+- a "how to avoid" rule.
+
+Example, B1 → "Optional field sent as explicit `null` on PATCH": detection = "which optional DTO fields can arrive as `null`, and what does `new Date(null)` / `?? ` do with them"; test = "PATCH with `null` for each optional field"; rule = "`@IsOptional` permits `null`, so reject it with `@ValidateIf`/`@IsNotEmpty`, or handle it explicitly".
+
+The classes must cover at least:
+- explicit `null` on optional fields (B1);
+- read-modify-write outside the lock or transaction, causing lost updates (B2);
+- side effects after commit with no outbox, timeout or recovery (B3);
+- date-times without a time-zone offset (B4);
+- client idempotency-key lifecycle on retryable errors (B5);
+- pagination state after a delete (B6);
+- lenient ISO-8601 forms such as ordinal dates (B7);
+- precision lost on round-trip edits (B8);
+- fingerprints of non-normalised input (B9);
+- unbounded growth with no TTL or cleanup (B10);
+- hardcoded fetch limits (B11);
+- invariants enforced only in application code with no database constraint (B12);
+- tests that mock the very guarantee under test (locks and races);
+- specs that assert buggy behaviour.
+
+Phrase each class so it applies to any CyberRock NestJS/Next.js/TypeORM change, because the kit has to work in the real CyberRock repo and not only on roombook. Write "a partial update must merge inside the same lock or transaction that guards the invariant", never "use COALESCE in the booking update".
+
+### D. AI-interaction and cost analysis, measured from the recordings
+Use `runs/tools/parse-events.mjs`. For every recorded step of both kits, tabulate:
+- turns;
+- output, input, cache-write and cache-read tokens;
+- cost and wall time;
+- tool calls by type;
+- files read more than once;
+- subagents started and their tokens;
+- document lines written;
+- re-runs, interruptions and confirmations.
+
+Then answer with numbers:
+- Where did the money go?
+- Which steps re-read the same context?
+- What did each extra session cost in context reload?
+- How many output tokens went to documents nobody reads, compared with code and tests?
+- Which AI calls bought quality (for example, findings from Spec Kit `analyze`) and which bought nothing (archive retries, duplicated restatements)?
+
+Known facts to confirm or correct:
+- Implementation cost is nearly equal ($13.57 against $13.88 on the feature), so savings come from the pre-code phases ($3.97 against $13.29).
+- Output tokens are the most expensive kind; cache reads dominate the token total.
+- Process weight is roughly fixed per change, not proportional to its size.
+
+### E. Conclusions
+End `research.md` with a ranked list of the cost levers and quality levers the new kit will use. Each lever carries its expected effect and its evidence.
+
+**"Save cost" does not mean "call AI less".** It means spend AI where it catches defects or does real work, and replace it with scripts where a deterministic check suffices. Examples:
+- a script validator instead of an AI format check;
+- one targeted AI review of the diff against the bug-class checklist, instead of a broad AI re-read of the plan;
+- no restating the same rule in several documents;
+- no step that only asks for confirmation;
+- a lightweight path for small changes;
+- a stable, cache-friendly prompt prefix;
+- parallel subagents only where tracks are truly independent.
+
+## Phase 1: Kit design, saved as `design.md` and a plan in the same folder
+
+Use the `brainstorming` skill for the design and the `writing-plans` skill for the plan (`plan.md` plus `implementation-phase-N.md`, following `documentation-management.md`). The design must specify:
+
+1. **Flow and tiers.** Use the fewest AI sessions that still keep a human review point between "spec" and "code".
+   - A single entry command classifies the brief (feature / change to existing behaviour / bugfix), picks a tier and records why.
+   - A bugfix must not pay for the feature flow.
+   - Planning (spec plus design plus tasks) happens in one step.
+   - Closing (merging deltas into the living specs) never asks for confirmation and must work headless on the first attempt.
+2. **Artifacts.**
+   - Living specs, updated by deltas (from OpenSpec).
+   - Requirement IDs and success criteria (from Spec Kit).
+   - WHEN/THEN scenarios with concrete values.
+   - Tasks that reference requirement IDs and carry `[P]` only when their file sets are disjoint.
+   - Each rule is stated once and referenced elsewhere by ID.
+   - A size budget per tier (e.g. maximum document lines and tasks), with the numbers justified by Phase 0.
+3. **Deterministic validator (no AI).** A dependency-free Node script with `node --test` tests and exit code 0/1, usable in CI. It checks at least:
+   - required sections exist;
+   - requirement IDs are unique and every requirement has at least one scenario and at least one task;
+   - every task references an existing ID;
+   - `[P]` tasks have disjoint file lists;
+   - delta operations are well formed and target existing requirements;
+   - nothing is left un-archived or stale;
+   - the "risk checklist" section (item 4) exists.
+4. **Bug-class guards.**
+   - The design step must fill a short risk checklist built from the Phase 0 catalogue. It marks each class "applies / does not apply", and each "applies" maps to a test task.
+   - The implement step follows `test-driven-development`.
+   - One targeted review step checks the diff against the catalogue and the RULES.md gates. It may reuse or adapt the existing `lean-review` skill. Keep the Ponytail MIT attribution in `THIRD-PARTY-SKILLS.md`.
+   - Real-database tests for invariants that depend on locks, transactions or constraints, using the docker-compose Postgres. Prefer database constraints for invariants.
+5. **Unattended and secure by default.**
+   - No telemetry and no network calls.
+   - No broad `allowed-tools` pre-approval: least privilege, plus deny rules where needed.
+   - No hooks unless the design proves they are needed.
+   - No writes to `.claude/settings.json` by the kit at runtime.
+   - Never reads `.env*`.
+6. **Portability to the real CyberRock repo.**
+   - Every project-specific fact lives in one rules/config file that references the shared rules (`/Users/tidi/sunbytes/.claude/rules/`), including R11 `LikePatternHelper`.
+   - Skills and agents contain no roombook-specific content.
+   - Include a short porting guide: what to copy, what to configure, what to delete.
+7. **Skills and agents.**
+   - Every new skill name starts with **`cr-`**. Finalise the set in the design. A likely starting point:
+     - `cr-propose`: classify, spec, design, tasks and risk checklist in one step;
+     - `cr-apply`: TDD implementation with parallel tracks from the `[P]` tasks;
+     - `cr-review`: targeted diff review against the bug classes and gates;
+     - `cr-archive`: merge deltas, no confirmation;
+     - a lighter path, or tier handling inside `cr-propose`, for bugfixes.
+   - **Implementation agents that carry the lessons.** The other two kits coded with the baseline `nestjs-expert` and `nextjs-fe-developer` agents, which knew nothing about these bug classes. The kit ships improved implementation agents, `cr-nestjs-expert` and `cr-nextjs-fe-developer`, built from those two. Each one has, built in:
+     - the bug-class rules from Phase 0 C that belong to its side (backend or frontend), each with its "how to avoid" rule and required test shape;
+     - the code-level strengths to copy (Phase 0 A) and the code-level weaknesses to avoid (Phase 0 B), as short do / do-not rules;
+     - the RULES.md gates and the TypeScript and architecture rules.
+     Keep each agent strict and short: rules and checks, not essays. `cr-apply` hands the coding to these agents.
+   - Before creating anything else, inspect the existing skills and agents in `baseline/.claude/` and `.claude/`: `research`, `writing-plans`, `test-driven-development`, `verification-before-completion`, `brainstorming`, `lean-*`, `nestjs-expert`, `nextjs-fe-developer`, `manual-tester`. Reuse or reference them instead of duplicating them. Create a further agent only where no existing one fits; any new agent takes the `cr-` prefix.
+   - Each skill and agent is strict and clear: purpose, inputs, exact outputs, stop conditions, size budget, and what it must never do.
+8. **Fairness rules for the experiment** (see Phase 3).
+
+**Fixed decisions: do what was done for the other two kits, so the comparison is fair for all three. Do not reopen these.**
+- **Git for the variant.** As with the other variants (`implementation-phase-5.md`, scoring step 3): `cyberrock-variant/` is its own local git repo during the runs, with the tag `baseline-v1` on the starting state and a commit plus the tag `change-<n>-done` after each change. The scoring tools diff between these tags. Afterwards it is folded into the top-level repo the way the other two variants were. No remote at any point.
+- **Model.** Every kit step uses `claude-fable-5-2` at default effort. The kit sets no model or effort override anywhere, so subagents inherit the session's model exactly as they did for the other kits.
+- **The real CyberRock repo.** The other kits never read it, so this one does not either. Do not open `/Users/tidi/sunbytes/CyberRock`. Portability is delivered by design (item 6) and the porting guide.
+- **Budget.** No separate budget approval. Run the three changes as the other kits ran them. A usage-limit interruption is handled by the same rule as before (resume once with "Continue.", keep both records).
+
+**No approval stop.** The owner has already approved running all phases straight through. Do not pause after Phase 0 or Phase 1 to present the research, design or plan: save them and continue to Phase 2. The only owner stop is the review of the finished change set at the very end.
+
+## Phase 2: Build the kit and the variant
+
+1. Create `cyberrock-variant/` from `baseline/` (the `baseline-v1` state, including its `.claude/`), exactly as the other variants started.
+   - Do not copy from `openspec-variant/` or `speckit-variant/`.
+   - Exclude `node_modules`, `dist`, `tmp`, `.nx` and every `.env*`.
+   - Generate local env values with the variant's own `scripts/make-local-env.sh`, and never read the result.
+   - Initialise its local git repo and tag the starting state `baseline-v1` (see the fixed decisions in Phase 1).
+2. Add the kit files: the `cr-*` skills, the `cr-*` agents, the rules/config file, the validator, the specs folder, and `.claude/settings.json` hardening (deny rules, no telemetry).
+3. The kit and the variant must not contain or reference:
+   - the reports;
+   - the other variants;
+   - `acceptance/`;
+   - `runs/`;
+   - roombook-specific fixes for B1–B12.
+4. Record the hardening and install footprint the same way `runs/install-summary.md` and `runs/openspec/install/deny-test.md` do: file and line counts, settings hashes before and after, and a deny-rule test.
+5. Validator tests pass (`node --test`). Run one recorded smoke step before the real runs, as the other kits did.
+
+## Phase 3: Run the three changes under the identical protocol
+
+- Extend the runner to accept the kit `cyberrock` and add tests for it:
+  - `runs/tools/phases.json` maps each `cr-*` step to specify / plan / check / implement / close;
+  - `make-prompts.mjs`;
+  - `rollup.mjs` and any other hardcoded `['openspec', 'speckit']` lists.
+- Fairness rules, all mandatory:
+  - Model `claude-fable-5-2`, default effort, `--permission-mode acceptEdits`, never a permission bypass. No model or effort override in any skill or agent.
+  - Each step is a separate headless `claude -p` session through `runs/tools/run-step.mjs`, with `process-note.md` as it is today.
+  - The brief text is byte-for-byte identical. Extend `make-prompts.test.mjs` to assert this for all three kits.
+  - `briefs/parallel-note.md` is added to the change-1 implement prompt only.
+  - Same done rule: build, lint, test, then at most two fix rounds through the kit, never a hand fix.
+  - Same rules for questions, interruptions and re-prompts, logged in `runs/cyberrock/interventions.jsonl` and `briefs/operator-answers.md`.
+  - Same scoring after each change: stack reset; acceptance groups `baseline` + `change-1`…`change-n` saved to `acceptance.json`; commit and tag; `change-stats.mjs`; `check-rules.mjs`. Change 3 also captures `before.json` and `after.json`, plus a copy of the kit's own bug write-up as `bug-report.md`.
+  - The hidden acceptance suite, its results, the reports and the other variants are **never** shown to a kit session.
+- Ports: use 3130 (gateway) and 4230 (web), the next free pair after the existing 3100/3110/3120 and 4200/4210/4220. Check that they are free first.
+- Write the outputs to `runs/cyberrock/…` with the same file layout as the other kits. Rebuild `runs/metrics.json` and `runs/timelines/*.json` for all three kits.
+- Do not touch the existing `runs/openspec/` or `runs/speckit/` recordings.
+
+## Phase 4: Code audit of `cyberrock-variant`
+
+- Use the `lean-audit` skill with the same brief, rubric and metric scripts as code audit §2–§3. Run it in a subagent that may read only `cyberrock-variant/`.
+- **The audit report is its own file in `plans/reports/`:** `plans/reports/cyberrock-variant-code-audit.md`, next to `openspec-variant-code-audit.md` and `speckit-variant-code-audit.md`, with the same structure and scoring scale as those two, so the three per-kit audits can be read side by side.
+- Collect the same metrics table as code audit §3 for the new variant, using the same scripts:
+  - diff size, source and spec lines, coverage, complexity, duplication;
+  - raw queries, transactions;
+  - `interface` / `any` / wildcard imports / disables;
+  - files over 200 lines.
+- The main session checks B1–B12 explicitly in the new code, and re-verifies every high finding and the top medium findings, as code audit §6 did.
+
+## Phase 5: Console and docs for three kits
+
+- Generalise the console from two kits to three. Known two-kit assumptions:
+  - `console/public/console.js`: `KITS`, `KIT_NAMES`, the per-kit step-label maps, `state.shown`, and the "why slower" explanation at about lines 70–85. That explanation must compare each kit against the fastest, not Spec Kit against OpenSpec.
+  - `console/public/index.html`: the kit `<article>` columns.
+  - `console/server.mjs`: the `SCREENSHOT` regex and the scene summary.
+  - `console/public/scene-intros.js`: "Both kits…" text.
+  - `console/public/console.css`: a three-column layout that still works at phone width.
+  - `runs/tools/build-timeline.mjs`, `report-tables.py`.
+  - `demo.sh`: a `cyberrock` target, its ports and its label.
+  - Find any other hardcoded kit list with `grep -rn "openspec\|speckit" console runs/tools demo.sh`.
+- A kit with no recording, or only part of one, still shows "not recorded" while the others render. This is existing Review Focus item 5; keep it for three kits.
+- Update and extend `console/test/*.test.mjs` and `runs/tools/test/*.test.mjs`. `node --test "console/test/*.test.mjs" "runs/tools/test/*.test.mjs"` must pass.
+- Docs: update only the parts that assume two kits in `CONSOLE.md`, `README.md` (the result table gets a third column), `SETUP.md` and `console/README.md`. Do not rewrite the existing reports.
+- Add one new report, `reports/cyberrock-variant-evaluation.md`, containing:
+  - three-kit tables generated from `runs/metrics.json` by `report-tables.py`: totals, per change, per phase;
+  - the three-kit code-audit metrics and scorecard, with a link to the per-kit audit `plans/reports/cyberrock-variant-code-audit.md`;
+  - the B1–B12 table with a `cyberrock` column;
+  - **lessons applied**: for each weakness and each bug class from the other two kits, which skill or agent rule now covers it, and whether the new variant's code actually avoided it. This is the kit's design intent and is stated as such: it was built from the other kits' mistakes on purpose;
+  - the AI-interaction findings and the levers that worked or did not;
+  - a verdict tagged [Verified] or [Judgement] as in the existing reports;
+  - the porting guide for the CyberRock repo;
+  - limitations, at minimum:
+    - one run per kit;
+    - its runs happened later than the others;
+    - the result on roombook does not yet prove the same gain on a new, unseen CyberRock change; the pilot is what tests that.
+
+## Constraints
+
+- Follow YAGNI, KISS and DRY. Wrap and reuse existing tools and skills; do not reinvent them. Files stay under 200 lines, names are kebab-case, and there are no narrative comments.
+- Do not modify:
+  - `baseline/`, `openspec-variant/`, `speckit-variant/`;
+  - `acceptance/`, the briefs;
+  - the existing `runs/openspec/` and `runs/speckit/` data;
+  - the existing reports;
+  - anything outside this repo.
+- No new npm/pip packages, plugins, MCP servers or third-party skills (`security.md` §4). If one seems needed, stop and report it with the six points from §4.
+- No secrets in any file, prompt, report or log. Never read, print or modify `.env*`.
+- Git is local only: no remote, no push, no PR. Conventional commits without AI references. Inside `cyberrock-variant/`'s own repo, commit and tag after each change as the protocol requires. In the top-level repo, commit nothing: leave the change set uncommitted for the owner's final review.
+- Run straight through without stopping to ask. Where something is not specified, do what was done for the other two kits; if that gives no answer, choose the simplest option and record it as an assumption in `design.md` or the evaluation report. Stop only for a security concern (`security.md`), a need for a new dependency, or a blocker that makes a fair run impossible (for example, the model is unavailable or the stack will not start).
+- Never claim tests passed without running them. Never tune the kit to the hidden acceptance suite.
+
+## Acceptance criteria
+
+- [ ] `research.md` covers A–E with citations. The cost analysis is computed from the recordings, not copied from the reports.
+- [ ] `design.md` and the plan were saved before the build started, and every assumption made along the way is recorded.
+- [ ] Every new skill starts with `cr-`. Each states its purpose, inputs, outputs, stop conditions and size budget, and none duplicates an existing skill or agent.
+- [ ] The validator runs without AI, exits 0/1, has passing `node --test` tests and enforces the checks in Phase 1, item 3.
+- [ ] The bug-class catalogue is generic, and the kit's risk checklist and review step use it.
+- [ ] `cr-nestjs-expert` and `cr-nextjs-fe-developer` exist, carry the bug-class rules and the do / do-not lessons for their side, and are the agents `cr-apply` uses to write code.
+- [ ] The evaluation report's "lessons applied" table maps every weakness and bug class from the other two kits to the rule that covers it and to the result in the new code.
+- [ ] Git, model and scope followed the fixed decisions: local per-variant repo with tags, `claude-fable-5-2` with no override, the real CyberRock repo never opened.
+- [ ] The kit has no telemetry, no broad pre-approval, and a verified deny rule.
+- [ ] All three changes ran under the identical protocol, with complete records, `verify.json`, `acceptance.json`, `stats.json`, `rules.json` and tags. Every gap has a noted reason.
+- [ ] The code audit of `cyberrock-variant` uses the same rubric, includes the B1–B12 check, and saved its report.
+- [ ] The console replays all three kits side by side, handles a missing recording, and all console and tool tests pass.
+- [ ] `README.md`, `CONSOLE.md`, `SETUP.md`, `console/README.md` and the new evaluation report are consistent with `runs/metrics.json`.
+- [ ] The verdict honestly states whether `cyberrock-variant` beat OpenSpec and Spec Kit on cost, time, output tokens, correctness and findings, and whether it is ready to pilot in the CyberRock repo.
+- [ ] Owner review gate: after build, lint and tests pass, the change set is presented. `code-reviewer` runs only if the owner asks.
+
+## Deliverables
+
+1. `plans/<YYMMDD-HHMM>-cyberrock-variant-kit/`: `research.md`, `design.md`, `plan.md`, `implementation-phase-N.md`.
+2. `cyberrock-variant/`: the baseline plus the kit (`cr-*` skills, agents if any, rules/config file, validator and tests, hardening) plus the code it wrote for the three changes.
+3. `runs/cyberrock/…`, plus `runs/metrics.json` and `runs/timelines/*.json` rebuilt for all three kits, and the runner extended with tests.
+4. `plans/reports/cyberrock-variant-code-audit.md`.
+5. The three-kit console, `demo.sh`, and the updated `README.md`, `CONSOLE.md`, `SETUP.md` and `console/README.md`.
+6. `reports/cyberrock-variant-evaluation.md`, with the verdict, the porting guide and the limitations.

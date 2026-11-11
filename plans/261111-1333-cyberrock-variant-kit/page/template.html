@@ -1,0 +1,140 @@
+<title>{{TITLE}}</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  /* Layout: one reading column for a report; a sticky switch chooses which kits every table shows. */
+  :root {
+    --bg: #f6f5fa;
+    --panel: #ffffff;
+    --ink: #1c1a26;
+    --muted: #645f73;
+    --line: #dcd9e6;
+    --accent: #5b3fb8;
+    --chip: #ece8f7;
+    --os: #0f766e;
+    --sk: #9a3412;
+    --cr: #5b3fb8;
+    --font-display: 'Space Grotesk', 'Avenir Next', 'Segoe UI', sans-serif;
+    --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #131b2b; --panel: #1b2538; --ink: #eaeef6; --muted: #a3aec4; --line: #2f3c57;
+      --accent: #ffd166; --chip: #2b3852; --os: #4fd1c5; --sk: #fb923c; --cr: #ffd166;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #131b2b; --panel: #1b2538; --ink: #eaeef6; --muted: #a3aec4; --line: #2f3c57;
+    --accent: #ffd166; --chip: #2b3852; --os: #4fd1c5; --sk: #fb923c; --cr: #ffd166;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.55; }
+  body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+
+  .wrap { max-width: 1080px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  header.top .wrap { padding-block: 40px 16px; }
+  main.wrap { padding-block: 8px 72px; display: flex; flex-direction: column; gap: 20px; }
+
+  h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height: 1.2; text-wrap: balance; margin: 0; }
+  h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); letter-spacing: -0.01em; }
+  h2 { font-size: 1.45rem; padding-top: 28px; border-top: 1px solid var(--line); }
+  h3 { font-size: 1.12rem; }
+  h4 { font-size: 1rem; }
+  p, ul, ol { margin: 0; max-width: 72ch; }
+  ul, ol { padding-left: 1.25rem; display: flex; flex-direction: column; gap: 6px; }
+  .lede { color: var(--muted); font-size: 1.05rem; max-width: 66ch; margin-top: 10px; }
+  .meta { color: var(--muted); font-size: 0.85rem; margin-top: 14px; }
+  code { font-family: var(--font-mono); font-size: 0.84em; background: var(--chip); padding: 1px 5px; border-radius: 4px; overflow-wrap: anywhere; }
+  a { color: var(--accent); }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  section { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+  main > section { gap: 16px; }
+
+  .switch-bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line); }
+  .switch-bar .wrap { padding-block: 10px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
+  .switch-label { font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  .switch { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; background: var(--panel); }
+  .switch button { font: inherit; font-size: 0.9rem; font-weight: 500; color: var(--muted); background: transparent; border: 0; border-radius: 999px; padding: 6px 14px; cursor: pointer; }
+  .switch button[aria-pressed="true"] { background: var(--accent); color: var(--panel); font-weight: 600; }
+  .switch-note { font-size: 0.85rem; color: var(--muted); }
+
+  .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); }
+  table { border-collapse: collapse; width: 100%; font-size: 0.9rem; font-variant-numeric: tabular-nums; }
+  th, td { padding: 9px 12px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+  tbody tr:last-child td { border-bottom: 0; }
+  thead th { font-family: var(--font-display); font-weight: 600; font-size: 0.86rem; white-space: nowrap; background: var(--chip); }
+  td.num, th.num { text-align: right; }
+  td:first-child { font-weight: 500; }
+  td.cr, th.cr { background: color-mix(in srgb, var(--cr) 10%, var(--panel)); }
+  thead th.cr { background: color-mix(in srgb, var(--cr) 24%, var(--panel)); }
+  .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; vertical-align: baseline; }
+  .dot-os { background: var(--os); } .dot-sk { background: var(--sk); } .dot-cr { background: var(--cr); }
+
+  .tag { font-size: 0.74rem; font-weight: 600; letter-spacing: 0.02em; padding: 1px 6px; border-radius: 4px; border: 1px solid var(--line); color: var(--muted); white-space: normal; }
+  .note { border: 1px solid var(--line); border-left: 4px solid var(--accent); background: var(--panel); border-radius: 8px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
+  .note p { max-width: 78ch; }
+  .toc { columns: 2 260px; column-gap: 28px; padding-left: 1.25rem; display: block; max-width: none; font-size: 0.93rem; }
+  .toc li { margin-bottom: 5px; break-inside: avoid; }
+  .links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .links a { display: inline-flex; padding: 6px 13px; border: 1px solid var(--line); border-radius: 999px; background: var(--panel); color: var(--ink); text-decoration: none; font-size: 0.88rem; font-weight: 500; }
+  .links a:hover { border-color: var(--accent); }
+
+  .two-only { display: none; }
+  body.view-two .two-only { display: flex; }
+  body.view-two .cr, body.view-two .cr-only { display: none; }
+
+  @media (prefers-reduced-motion: no-preference) { .switch button { transition: background-color 120ms, color 120ms; } }
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <h1>{{H1}}</h1>
+    <p class="lede">{{LEDE}}</p>
+    <p class="meta">{{META}}</p>
+    {{LINKS}}
+  </div>
+</header>
+
+{{SWITCH}}
+<main class="wrap">
+  {{INTRO}}
+
+  <section id="contents" class="{{TOC_CLASS}}">
+    <h2>Contents</h2>
+    <ol class="toc">{{TOC}}</ol>
+  </section>
+
+  {{BODY}}
+</main>
+
+<script>
+  (function () {
+    var three = document.getElementById('view-three');
+    var two = document.getElementById('view-two');
+    var note = document.getElementById('switch-note');
+    if (!three || !two) { return; }
+    function show(view, writeHash) {
+      var isTwo = view === 'two-kits';
+      document.body.classList.toggle('view-two', isTwo);
+      three.setAttribute('aria-pressed', String(!isTwo));
+      two.setAttribute('aria-pressed', String(isTwo));
+      note.textContent = isTwo
+        ? 'The CyberRock kit column and the sections about it are hidden.'
+        : 'Every table shows all three kits; the CyberRock kit column is tinted.';
+      if (writeHash) { location.hash = view; }
+    }
+    function fromHash() {
+      var name = location.hash.replace('#', '');
+      if (name === 'two-kits' || name === 'three-kits') { show(name, false); }
+    }
+    three.addEventListener('click', function () { show('three-kits', true); });
+    two.addEventListener('click', function () { show('two-kits', true); });
+    window.addEventListener('hashchange', fromHash);
+    fromHash();
+  })();
+</script>

@@ -2,7 +2,7 @@
 
 How to run the demo, what you can test, and how to show the results. For what this repository is and why it looks the way it does, see [README.md](README.md).
 
-All commands run from `/workspace/spec-duel/` unless stated otherwise.
+All commands run from this folder (the one that holds `demo.sh`) unless stated otherwise. Older documents call it `/workspace/spec-duel/`.
 
 ## 1. Prerequisites
 
@@ -20,16 +20,16 @@ On this machine the apps' dependencies and the acceptance suite's dependencies a
 ## 2. One command for everything: `demo.sh`
 
 ```bash
-./demo.sh up                 # start both kits' apps and the console
+./demo.sh up                 # start the three kits' apps and the console
 ./demo.sh status             # what is running, and on which ports
-./demo.sh test               # run the hidden acceptance suite against both apps
+./demo.sh test               # run the hidden acceptance suite against the three apps
 ./demo.sh down               # stop everything (data is kept)
-./demo.sh reset              # wipe both apps' data and start again
+./demo.sh reset              # wipe the three apps' data and start again
 ./demo.sh console            # only the console, in the foreground; no apps needed
 ./demo.sh help
 ```
 
-Every command except `console` takes optional targets: `openspec`, `speckit` or `baseline`. Without targets it acts on both kits. For example, `./demo.sh up baseline` starts the original codebase, with the bug still in it.
+Every command except `console` takes optional targets: `openspec`, `speckit`, `cyberrock` or `baseline`. Without targets it acts on the three kits. For example, `./demo.sh up baseline` starts the original codebase, with the bug still in it.
 
 What `up` does, for each target, in parallel:
 1. creates the app's local `.env` with throwaway values if it is missing;
@@ -46,16 +46,17 @@ It also starts the console. The first start takes a few minutes for the builds; 
 |---|---|---|---|
 | OpenSpec app | http://localhost:4210 | http://localhost:3110/api | `roombook-openspec` |
 | Spec Kit app | http://localhost:4220 | http://localhost:3120/api | `roombook-speckit` |
+| CyberRock kit app | http://localhost:4230 | http://localhost:3130/api | `roombook-cyberrock` |
 | Baseline (optional) | http://localhost:4200 | http://localhost:3100/api | `roombook` |
 | Console | http://127.0.0.1:4300 | | |
 
-The apps are fully separate: their own containers, database, ports and data. All three can run at the same time. Each front end talks only to its own API, so to compare the kits you open both front ends side by side.
+The apps are fully separate: their own containers, database, ports and data. All four can run at the same time. Each front end talks only to its own API, so to compare the kits you open their front ends side by side.
 
 ## 3. What you can test
 
 ### 3.1 The bookings page each kit built
 
-Open http://localhost:4210/bookings and http://localhost:4220/bookings side by side. Each page was written by its kit from the same brief.
+Open http://localhost:4210/bookings, http://localhost:4220/bookings and http://localhost:4230/bookings side by side. Each page was written by its kit from the same brief.
 
 Try on each:
 - **Create a booking:** pick a room, enter a title, an email and a start and end time.
@@ -80,6 +81,7 @@ The bug: on the `/rooms` page, choose 5 rooms per page and go to page 2. It shou
 | Baseline, http://localhost:4200/rooms (`./demo.sh up baseline`) | Room 11 and Room 12: the bug |
 | OpenSpec app, http://localhost:4210/rooms | Room 06 to Room 10: fixed |
 | Spec Kit app, http://localhost:4220/rooms | Room 06 to Room 10: fixed |
+| CyberRock kit app, http://localhost:4230/rooms | Room 06 to Room 10: fixed |
 
 The same through the API:
 
@@ -87,13 +89,14 @@ The same through the API:
 curl -s "http://localhost:3100/api/rooms?page=2&limit=5"   # baseline: wrong rooms
 curl -s "http://localhost:3110/api/rooms?page=2&limit=5"   # OpenSpec: fixed
 curl -s "http://localhost:3120/api/rooms?page=2&limit=5"   # Spec Kit: fixed
+curl -s "http://localhost:3130/api/rooms?page=2&limit=5"   # CyberRock kit: fixed
 ```
 
-Each kit's written analysis of the cause is in `runs/openspec/change-3/bug-report.md` and `runs/speckit/change-3/bug-report.md`.
+Each kit's written analysis of the cause is in `runs/openspec/change-3/bug-report.md`, `runs/speckit/change-3/bug-report.md` and `runs/cyberrock/change-3/bug-report.md`.
 
 ### 3.3 The API directly
 
-Replace `3110` with `3120` to try the Spec Kit app. First get a room id:
+Replace `3110` with `3120` to try the Spec Kit app, or with `3130` for the CyberRock kit app. First get a room id:
 
 ```bash
 ROOM=$(curl -s "http://localhost:3110/api/rooms" | python3 -c "import json,sys; print(json.load(sys.stdin)['items'][0]['id'])")
@@ -107,7 +110,7 @@ BODY="{\"roomId\":\"$ROOM\",\"title\":\"Planning\",\"organizerEmail\":\"me@examp
 curl -s -i -X POST http://localhost:3110/api/bookings -H "Content-Type: application/json" -H "Idempotency-Key: $KEY" -d "$BODY"
 ```
 
-The example always books the same hour. If you run it again on the same app with a new key, the create answers 409 because that hour is already taken: change the date in `BODY`, or wipe the app's data with `./demo.sh reset openspec` (or `speckit`).
+The example always books the same hour. If you run it again on the same app with a new key, the create answers 409 because that hour is already taken: change the date in `BODY`, or wipe the app's data with `./demo.sh reset openspec` (or `speckit`, `cyberrock`).
 
 Things to try:
 - **Send the same request again with the same key.** You get the same answer and the header `Idempotency-Replayed: true`, and no second booking is created.
@@ -120,7 +123,7 @@ Things to try:
 ### 3.4 The hidden acceptance suite
 
 ```bash
-./demo.sh test               # both apps
+./demo.sh test               # the three apps
 ./demo.sh test openspec      # one app
 ```
 
@@ -133,22 +136,24 @@ It runs 41 HTTP tests in four groups against the running app:
 | change-2 | No overlapping bookings |
 | change-3 | Room paging with a custom page size |
 
-Both apps pass 41 of 41. The tests add bookings far in the future (from year 2040), so they don't clash with bookings you create by hand.
+All three apps pass 41 of 41. The tests add bookings far in the future (from year 2040), so they don't clash with bookings you create by hand.
 
 Against the baseline (`./demo.sh test baseline`), only the 8 baseline tests and 1 paging test pass. Bookings don't exist yet there, and the bug is still in place.
 
 ### 3.5 Each app's own build and tests
 
 ```bash
-cd openspec-variant   # or speckit-variant
+cd openspec-variant   # or speckit-variant, cyberrock-variant
 pnpm run build
 pnpm run lint
-pnpm run test         # OpenSpec: 309 unit tests, Spec Kit: 321
+pnpm run test         # OpenSpec: 309 unit tests, Spec Kit: 321, CyberRock kit: 429 (needs its Postgres running, see below)
 ```
+
+The CyberRock kit's unit run includes its tests against the real database, so start its containers first: `cd cyberrock-variant && docker compose up -d --wait` (or `./demo.sh up cyberrock`). With the database down those tests fail. This is a known defect of the kit, described in `reports/cyberrock-variant-evaluation.md`.
 
 ### 3.6 What each kit wrote, and how it changed the code
 
-Each app is its own git repository, with one tag per stage:
+`cyberrock-variant/` is its own git repository, with one tag per stage. The OpenSpec and Spec Kit folders had the same tags when they were recorded, but lost their own history when the demo was imported into one repository, so the commands below work only in `cyberrock-variant/`:
 
 | Tag | Stage |
 |---|---|
@@ -158,7 +163,7 @@ Each app is its own git repository, with one tag per stage:
 | `change-2-done` | After the change to existing behaviour |
 | `change-3-done` | After the bug fix |
 
-Useful commands, run inside either app's folder:
+Useful commands, run inside `cyberrock-variant/`:
 
 ```bash
 git log --oneline                                   # one commit per stage
@@ -173,8 +178,12 @@ Where to read each kit's documents:
 - **Spec Kit:**
   - `specs/001-room-bookings/`, `specs/002-prevent-booking-overlap/` and `specs/003-fix-rooms-pagination/` hold one folder per change, each with its spec, plan, research, data model, contracts, quickstart and tasks;
   - `.specify/memory/constitution.md` holds the project rules.
+- **CyberRock kit:**
+  - `cr/specs/` holds the living specs, one file per capability, with a numbered ID on every requirement;
+  - `cr/changes/archive/` holds one `change.md` per change;
+  - `cr/rules.md` holds the project rules and `cr/risks.md` the bug-type catalogue.
 
-The clearest difference: after change 2, OpenSpec's `openspec/specs/bookings-api/spec.md` describes the overlap rule. Spec Kit's `specs/001-room-bookings/spec.md` still says overlapping bookings are accepted, and the rule lives only in `specs/002-…`.
+The clearest difference: after change 2, OpenSpec's `openspec/specs/bookings-api/spec.md` and the CyberRock kit's `cr/specs/bookings.md` describe the overlap rule. Spec Kit's `specs/001-room-bookings/spec.md` still says overlapping bookings are accepted, and the rule lives only in `specs/002-…`.
 
 ### 3.7 The measurements
 
@@ -186,6 +195,7 @@ The clearest difference: after change 2, OpenSpec's `openspec/specs/bookings-api
 | `runs/<kit>/change-<n>/acceptance-summary.json`, `verify.json`, `stats.json`, `rules.json` | Scoring for that change |
 | `runs/install-summary.md` | What each kit installed, and the security checks |
 | `runs/openspec/install/deny-test.md` | Proof that OpenSpec's risky subcommands are blocked |
+| `runs/cyberrock/install/deny-test.md` | Proof that the CyberRock kit's deny rules block `git push` and `git remote`, and its headless smoke test |
 | `runs/manual-tester-fit.md` | How well each kit's spec works as a source for manual test cases |
 | `runs/notes.md` | Everything that happened during the runs that affects the figures |
 
@@ -198,7 +208,7 @@ node runs/tools/build-timeline.mjs   # rebuilds the console's timelines
 
 ## 4. The console: showing the comparison
 
-The console replays both kits' recorded runs side by side. It needs neither app running and costs nothing to use.
+The console replays the three kits' recorded runs side by side. It needs no app running and costs nothing to use.
 
 ```bash
 ./demo.sh up          # starts it along with the apps
@@ -221,11 +231,19 @@ Open http://127.0.0.1:4300. [CONSOLE.md](CONSOLE.md) explains everything on the 
 - Also shared with anyone who has the link. Use it when someone asks "how do you know?".
 - The same report as a local file: `reports/openspec-vs-spec-kit-comparison.md`.
 
+**CyberRock kit evaluation page:** https://claude.ai/artifact/Gi22wVojhqjsC6xLPfDSY3
+
+- It is private until shared: use the Share menu on the page to choose who can open it.
+- A switch at the top shows every comparison table with all three kits, or with OpenSpec and Spec Kit only.
+- The same report as a local file: `reports/cyberrock-variant-evaluation.md`. To rebuild a page after editing its report: `python3 plans/261111-1333-cyberrock-variant-kit/page/build-page.py evaluation <output.html>`, then publish the output to the same link.
+- **Code audit of the three kits:** https://claude.ai/artifact/J69PYSozk2S47BbKJwgtzN. This is the original code audit page, extended with the CyberRock kit and the same switch. Its local text is `reports/three-kit-code-audit.md`; the page is rebuilt from the original page by `plans/261111-1333-cyberrock-variant-kit/page/extend-original-code-audit.py`.
+- The two pages above were published before the third kit existed and cover OpenSpec and Spec Kit only.
+
 The board page links to this README, this guide and the full report page.
 
 A suggested order for a board demo:
 1. Show the report page's summary and charts.
-2. Open the console, play the Bugfix scene and let both kits run side by side (CONSOLE.md has a step-by-step for presenting it).
+2. Open the console, play the Bugfix scene and let the kits run side by side (CONSOLE.md has a step-by-step for presenting it).
 3. If there is time, open both bookings pages and the rooms page to show the working apps.
 4. Close on the recommendation and conditions in the report page.
 
@@ -242,6 +260,7 @@ node runs/tools/run-step.mjs --kit openspec --change 3 --step propose \
 - Use `--runs-dir` to keep the original recordings untouched.
 - Re-running changes the app's code, so do it on a copy, or reset afterwards with `git checkout change-<n>-done`.
 - A folder must have been opened once in interactive Claude Code, with the trust dialog accepted, or a headless session ignores its permission settings.
+- For the CyberRock kit, drop `--path-prepend` and use `--kit cyberrock --cwd "$PWD/cyberrock-variant"` with the prompts in `runs/cyberrock/change-<n>/prompts/`. Its check step is `node runs/tools/record-cli-check.mjs cyberrock <n> validate node cr/bin/cr.mjs validate`.
 - OpenSpec's CLI is at `openspec-variant/node_modules/.bin/openspec`. The Spec Kit CLI (`specify`) is not kept; it is only needed to install Spec Kit again. Recreate it with `python3 -m venv .venvs/specify && .venvs/specify/bin/pip install specify-cli==1.3.3`.
 
 ## 7. Troubleshooting
