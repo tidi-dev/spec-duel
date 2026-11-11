@@ -1,53 +1,16 @@
+import { alsoCovers, KITS, KIT_NAMES, ROUND_NOTES, STEP_DESCRIPTIONS, WHY_REASONS } from './kits.js';
 import { SCENE_INTROS } from './scene-intros.js';
 
-const KITS = ['openspec', 'speckit'];
-const KIT_NAMES = { openspec: 'OpenSpec', speckit: 'Spec Kit' };
 const PLAYBACK_SECONDS = 120;
 const PHASE_NAMES = { setup: 'Setup', specify: 'Specify', plan: 'Plan', check: 'Check', implement: 'Implement', close: 'Close' };
 
-const STEP_DESCRIPTIONS = {
-  openspec: {
-    propose: 'Reads the brief and the code, then writes the proposal, design, specs and task list',
-    validate: 'Checks the spec files with the OpenSpec command line; no AI, under a second',
-    apply: 'Writes the code and tests, working through its task list',
-    archive: 'Merges this change into the living specs and files the change away',
-  },
-  speckit: {
-    specify: 'Reads the brief and writes the specification: requirements, scenarios, success criteria',
-    clarify: 'Looks for unclear points in the specification and settles them',
-    plan: 'Researches the code, then writes the technical plan, data model and contracts',
-    tasks: 'Breaks the plan into a numbered task list and marks tasks that can run in parallel',
-    analyze: 'AI check: compares the spec, plan and tasks with each other and with the project rules',
-    implement: 'Writes the code and tests, working through its task list',
-  },
+const describeStep = (kitName, change, phase) => {
+  const description = ROUND_NOTES[`${kitName}:${change}:${phase.step}:${phase.round}`] ?? STEP_DESCRIPTIONS[kitName]?.[phase.step] ?? '';
+  return phase.parts > 1 ? `${description}. This step was interrupted once and resumed; its time, cost and turns are the two parts added together` : description;
 };
-
-const ROUND_NOTES = {
-  'openspec:1:apply:2': 'Continues the same work after the account usage limit cut the first part off',
-  'openspec:1:archive:2': 'Answers the confirmation question the first attempt stopped on',
-  'openspec:1:archive:3': 'Runs again with the answers given up front, after the second attempt was blocked',
-};
-
-const describeStep = (kitName, change, phase) =>
-  ROUND_NOTES[`${kitName}:${change}:${phase.step}:${phase.round}`] ?? STEP_DESCRIPTIONS[kitName]?.[phase.step] ?? '';
 
 const GROUP_ORDER = ['baseline', 'change-1', 'change-2', 'change-3'];
 const GROUP_NAMES = { baseline: 'baseline (health, rooms)', 'change-1': 'change 1 (bookings)', 'change-2': 'change 2 (no overlap)', 'change-3': 'change 3 (room paging)' };
-
-const WHY_REASONS = {
-  1: [
-    ['It plans in more steps and writes more.', "Its plan and tasks steps alone took 11:40, producing a technical plan, research notes, a data model, three contract files, a quickstart and 91 tasks, against OpenSpec's 34."],
-    ['Its check is an AI session.', "analyze cross-checks spec, plan and tasks in 3:56; OpenSpec's check is a command-line format check that takes under a second."],
-  ],
-  2: [
-    ['It writes a complete new spec for the change; OpenSpec only writes what changes.', 'OpenSpec added 585 lines of notes against its existing specs in one step. Spec Kit started a fresh spec folder with its own plan, research, data model, contracts, quickstart and 30 tasks: 1,265 lines over four steps. Spec Kit actually wrote the code slightly faster.'],
-    ['The AI check again.', '3:00, against under a second.'],
-  ],
-  3: [
-    ['It ran its full feature process for a 2-line fix.', "Its plan and tasks steps alone (4:43) took longer than OpenSpec's whole run (3:56): research, a data model, two contract files, a quickstart and 15 tasks, 900 lines against OpenSpec's 4 tasks and 225 lines."],
-    ['More tasks meant longer coding.', "With 15 tasks, including verification steps, it wrote a 47-line test against OpenSpec's 11 lines: 2:28 against 1:20 for the same fix, plus 1:23 for the AI check."],
-  ],
-};
 
 const WHY_PHASES = [
   ['Specify and plan', ['specify', 'plan']],
@@ -56,10 +19,21 @@ const WHY_PHASES = [
   ['Close', ['close']],
 ];
 
-const phaseTime = (kit, names) => {
+const phaseName = (phase) => PHASE_NAMES[phase.phase] ?? phase.phase;
+
+const phaseLabel = (kitName, kit, phase) => {
+  const extra = alsoCovers(kitName, kit, phase).map((name) => PHASE_NAMES[name].toLowerCase());
+  if (extra.length === 0) {
+    return phaseName(phase);
+  }
+  return `${[phaseName(phase), ...extra.slice(0, -1)].join(', ')} and ${extra.at(-1)} (one session)`;
+};
+
+const phaseTime = (kitName, kit, names) => {
   const steps = kit.phases.filter((phase) => names.includes(phase.phase));
   if (steps.length === 0) {
-    return 'none';
+    const holder = kit.phases.find((phase) => alsoCovers(kitName, kit, phase).some((name) => names.includes(name)));
+    return holder ? `inside ${phaseName(holder)}` : 'none';
   }
   const ms = steps.reduce((sum, phase) => sum + (phase.endMs - phase.startMs), 0);
   return ms < 1000 ? 'under 1 s' : clock(ms);
@@ -67,30 +41,40 @@ const phaseTime = (kit, names) => {
 
 const renderWhy = (scene) => {
   const section = $('#why');
-  const [openspec, speckit] = [scene.kits.openspec, scene.kits.speckit];
-  const reasons = WHY_REASONS[scene.change];
-  if (!reasons || openspec.status === 'missing' || speckit.status === 'missing' || speckit.totals.wallMs <= openspec.totals.wallMs) {
+  const recorded = KITS.filter((name) => scene.kits[name].status !== 'missing');
+  if (recorded.length < 2) {
     section.hidden = true;
     return;
   }
-  const gapSeconds = Math.round(speckit.totals.wallMs / 1000) - Math.round(openspec.totals.wallMs / 1000);
-  $('#why-title').textContent = `Why Spec Kit took ${clock(gapSeconds * 1000)} longer`;
+  const fastest = recorded.reduce((best, name) => (scene.kits[name].totals.wallMs < scene.kits[best].totals.wallMs ? name : best));
+  $('#why-title').textContent = `Where the time went (fastest: ${KIT_NAMES[fastest]}, ${clock(scene.kits[fastest].totals.wallMs)})`;
   const table = $('#why-table');
   table.replaceChildren();
   const head = el('tr');
-  head.append(el('th', '', 'Phase'), el('th', 'num', 'OpenSpec'), el('th', 'num', 'Spec Kit'));
+  head.append(el('th', '', 'Phase'), ...recorded.map((name) => el('th', 'num', KIT_NAMES[name])));
   table.append(head);
   for (const [label, names] of WHY_PHASES) {
     const row = el('tr');
-    row.append(el('th', '', label), el('td', 'num', phaseTime(openspec, names)), el('td', 'num', phaseTime(speckit, names)));
+    row.append(el('th', '', label), ...recorded.map((name) => el('td', 'num', phaseTime(name, scene.kits[name], names))));
     table.append(row);
   }
+  const gaps = el('tr');
+  gaps.append(
+    el('th', '', 'Longer than the fastest'),
+    ...recorded.map((name) => el('td', 'num', name === fastest ? 'fastest' : `+${clock(scene.kits[name].totals.wallMs - scene.kits[fastest].totals.wallMs)}`)),
+  );
+  table.append(gaps);
+  const reasons = (WHY_REASONS[scene.change] ?? []).filter(
+    ({ slower, faster }) => recorded.includes(slower) && recorded.includes(faster) && scene.kits[slower].totals.wallMs > scene.kits[faster].totals.wallMs,
+  );
   $('#why-reasons').replaceChildren(
-    ...reasons.map(([lead, detail]) => {
-      const item = el('li');
-      item.append(el('strong', '', lead), ` ${detail}`);
-      return item;
-    }),
+    ...reasons.flatMap(({ slower, faster, points }) =>
+      points.map(([lead, detail]) => {
+        const item = el('li');
+        item.append(el('em', '', `${KIT_NAMES[slower]} against ${KIT_NAMES[faster]}: `), el('strong', '', lead), ` ${detail}`);
+        return item;
+      }),
+    ),
   );
   section.hidden = false;
 };
@@ -123,7 +107,9 @@ const number = (value) => Math.round(value).toLocaleString('en-US');
 const money = (value) => `$${value.toFixed(2)}`;
 const allTokens = (totals) => totals.inputTokens + totals.outputTokens + totals.cacheReadTokens + totals.cacheCreationTokens;
 
-const state = { scenes: [], scene: null, timer: null, simulated: 0, speed: 1, shown: { openspec: 0, speckit: 0 } };
+const noneShown = () => Object.fromEntries(KITS.map((name) => [name, 0]));
+
+const state = { scenes: [], scene: null, timer: null, simulated: 0, speed: 1, shown: noneShown() };
 
 const roomsTable = (response, caption) => {
   const table = el('table');
@@ -213,7 +199,7 @@ const renderKit = (name, kit) => {
   for (const phase of kit.phases) {
     const segment = el('div', 'seg');
     segment.style.flexGrow = String(Math.max(1, phase.endMs - phase.startMs));
-    segment.title = `${PHASE_NAMES[phase.phase] ?? phase.phase} · ${stepLabel(phase)}, ${clock(phase.endMs - phase.startMs)}: ${describeStep(name, state.scene.change, phase)}`;
+    segment.title = `${phaseLabel(name, kit, phase)} · ${stepLabel(phase)}, ${clock(phase.endMs - phase.startMs)}: ${describeStep(name, state.scene.change, phase)}`;
     segment.append(el('i'));
     strip.append(segment);
   }
@@ -225,7 +211,7 @@ const renderKit = (name, kit) => {
     box.title = `${stepLabel(phase)}: ${describeStep(name, state.scene.change, phase)}`;
     box.setAttribute('aria-expanded', 'false');
     box.append(
-      el('span', 'step-phase', `${index + 1} ${PHASE_NAMES[phase.phase] ?? phase.phase}`),
+      el('span', 'step-phase', `${index + 1} ${phaseLabel(name, kit, phase)}`),
       el('span', 'step-name', phase.round > 1 ? `${phase.step} (${phase.round})` : phase.step),
       el('span', 'step-time', clock(phase.endMs - phase.startMs)),
     );
@@ -288,7 +274,7 @@ const paintKit = (name, kit, at) => {
     stepCount.textContent = `${kit.phases.length} of ${kit.phases.length} steps done`;
     stepDesc.textContent = '';
   } else if (current) {
-    phaseNow.append(`${PHASE_NAMES[current.phase] ?? current.phase} `, el('small', '', `· ${stepLabel(current)}`));
+    phaseNow.append(`${phaseLabel(name, kit, current)} `, el('small', '', `· ${stepLabel(current)}`));
     stepCount.textContent = `Step ${currentIndex + 1} of ${kit.phases.length}`;
     stepDesc.textContent = describeStep(name, state.scene.change, current);
   }
@@ -315,10 +301,11 @@ const paintKit = (name, kit, at) => {
 const summaryRow = (label, values, lowerIsBetter = true) => {
   const row = el('tr');
   row.append(el('th', '', label));
-  const numbers = values.map((value) => value?.sort);
-  values.forEach((value, index) => {
-    const other = numbers[1 - index];
-    const better = lowerIsBetter !== null && value && other !== undefined && value.sort !== other && (lowerIsBetter ? value.sort < other : value.sort > other);
+  const numbers = values.filter(Boolean).map((value) => value.sort);
+  const best = lowerIsBetter ? Math.min(...numbers) : Math.max(...numbers);
+  const allEqual = numbers.every((value) => value === numbers[0]);
+  values.forEach((value) => {
+    const better = lowerIsBetter !== null && value && numbers.length > 1 && !allEqual && value.sort === best;
     row.append(el('td', `num${better ? ' ok' : ''}`, value ? value.text : 'not recorded'));
   });
   return row;
@@ -329,7 +316,7 @@ const renderSummary = (scene) => {
   const table = $('#summary-table');
   table.replaceChildren();
   const head = el('tr');
-  head.append(el('th', '', ''), el('th', 'num', 'OpenSpec'), el('th', 'num', 'Spec Kit'));
+  head.append(el('th', '', ''), ...KITS.map((name) => el('th', 'num', KIT_NAMES[name])));
   table.append(head);
   const cell = (pick, format) => kits.map((kit) => (kit ? { sort: pick(kit), text: format(pick(kit)) } : null));
   table.append(
@@ -399,7 +386,7 @@ const toggleStepDetail = (root, name, kit, index) => {
   const phase = kit.phases[index];
   const heading = el('p', 'step-detail-head');
   heading.append(
-    el('strong', '', `Step ${index + 1} of ${kit.phases.length} · ${PHASE_NAMES[phase.phase] ?? phase.phase} · ${stepLabel(phase)}`),
+    el('strong', '', `Step ${index + 1} of ${kit.phases.length} · ${phaseLabel(name, kit, phase)} · ${stepLabel(phase)}`),
     el('span', 'step-detail-figures', `${phase.endMs - phase.startMs < 1000 ? 'under 1 s' : clock(phase.endMs - phase.startMs)} · ${money(phase.costUsd)} · ${phase.turns} ${phase.turns === 1 ? 'turn' : 'turns'}`),
   );
   const close = el('button', 'step-detail-close', '×');
@@ -437,7 +424,7 @@ window.addEventListener('resize', () => alignStepAreas());
 const resetScene = () => {
   stop();
   state.simulated = 0;
-  state.shown = { openspec: 0, speckit: 0 };
+  state.shown = noneShown();
   $('#summary').hidden = true;
   $('#why').hidden = true;
   $('#after').hidden = true;
@@ -493,12 +480,12 @@ const loadScene = async (change) => {
   if (scene.recordedAt) {
     banner.append(
       el('strong', '', 'Recorded run. '),
-      `Recorded ${new Date(scene.recordedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}. The longer kit took ${clock(longest)} of real time; playback fits it into about two minutes. Every figure and document shown is from the real run.`,
+      `Recorded ${new Date(scene.recordedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}. The longest kit took ${clock(longest)} of real time; playback fits it into about two minutes. Every figure and document shown is from the real run.`,
     );
   } else {
     banner.textContent = 'This scene has not been recorded yet.';
   }
-  const before = scene.kits.openspec.before ?? scene.kits.speckit.before;
+  const before = KITS.map((name) => scene.kits[name].before).find(Boolean);
   $('#before').hidden = !(change === '3' && before);
   if (change === '3' && before) {
     $('#before-rooms').replaceChildren(roomsTable(before, 'What the page shows today: page 2 with 5 per page'));
@@ -508,6 +495,14 @@ const loadScene = async (change) => {
 };
 
 const start = async () => {
+  $('#columns').replaceChildren(
+    ...KITS.map((name) => {
+      const column = el('article', 'kit');
+      column.id = `kit-${name}`;
+      column.dataset.kit = name;
+      return column;
+    }),
+  );
   state.scenes = await (await fetch('/api/scenes')).json();
   const nav = $('#scenes');
   for (const scene of state.scenes) {

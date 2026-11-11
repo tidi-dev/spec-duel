@@ -4,7 +4,7 @@ import { createServer } from 'node:http';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
-import { buildTimeline } from '../runs/tools/build-timeline.mjs';
+import { buildTimeline, KITS } from '../runs/tools/build-timeline.mjs';
 
 const consoleDir = dirname(fileURLToPath(import.meta.url));
 const CHANGES = { 1: 'Feature', 2: 'Brownfield change', 3: 'Bugfix' };
@@ -12,9 +12,10 @@ const STATIC = {
   '/': ['index.html', 'text/html; charset=utf-8'],
   '/console.js': ['console.js', 'text/javascript; charset=utf-8'],
   '/scene-intros.js': ['scene-intros.js', 'text/javascript; charset=utf-8'],
+  '/kits.js': ['kits.js', 'text/javascript; charset=utf-8'],
   '/console.css': ['console.css', 'text/css; charset=utf-8'],
 };
-const SCREENSHOT = /^\/screenshots\/(openspec|speckit)\/(before|after)\.png$/;
+const SCREENSHOT = new RegExp(`^/screenshots/(${KITS.join('|')})/(before|after)\\.png$`);
 
 const send = (response, status, type, body) => {
   response.writeHead(status, { 'Content-Type': type, 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' });
@@ -39,7 +40,7 @@ export const createConsole = ({ runsDir, variantsDir }) =>
         200,
         Object.entries(CHANGES).map(([change, title]) => {
           const timeline = buildTimeline(runsDir, change, { variantsDir });
-          return { change, title, recordedAt: timeline.recordedAt, kits: { openspec: timeline.kits.openspec.status, speckit: timeline.kits.speckit.status } };
+          return { change, title, recordedAt: timeline.recordedAt, kits: Object.fromEntries(KITS.map((kit) => [kit, timeline.kits[kit].status])) };
         }),
       );
     }
